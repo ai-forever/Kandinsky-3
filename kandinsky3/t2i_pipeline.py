@@ -1,0 +1,86 @@
+from typing import Optional, Union, List
+import PIL
+import io
+import os
+import math
+import random
+
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+from PIL import Image, ImageDraw, ImageFont
+
+import torch
+import torchvision.transforms as T
+from torch import einsum
+from einops import repeat
+
+from kandinsky3.model.unet import UNet
+from kandinsky3.movq import MoVQ
+from kandinsky3.condition_encoders import T5TextConditionEncoder
+from kandinsky3.condition_processors import T5TextConditionProcessor
+from kandinsky3.model.diffusion import BaseDiffusion, get_named_beta_schedule
+
+
+class Kandinsky3T2IPipeline:
+    
+    def __init__(
+        self, 
+        device: Union[str, torch.device], 
+        unet: UNet,
+        null_embedding: torch.Tensor,
+        t5_processor: T5TextConditionProcessor,
+        t5_encoder: T5TextConditionEncoder,
+        movq: MoVQ,
+        fp16: bool = True
+    ):
+        self.device = device
+        self.fp16 = fp16
+        self.to_pil = T.ToPILImage()
+        
+        self.unet = unet
+        self.null_embedding = null_embedding
+        self.t5_processor = t5_processor
+        self.t5_encoder = t5_encoder
+        self.movq = movq
+        
+    def __call__(
+        self, 
+        text: str, 
+        images_num: int = 1, 
+        bs: int = 1, 
+        guidance_scale: float = 3.0,
+        steps: int = 50
+    ) -> List[PIL.Image.Image]:
+        betas = get_named_beta_schedule('cosine', steps)
+        base_diffusion = BaseDiffusion(betas, 0.98)
+        
+        condition_model_input = self.t5_processor.encode(text)
+        for key in condition_model_input:
+            for input_type in condition_model_input[key]:
+                condition_model_input[key][input_type] = condition_model_input[key][input_type].unsqueeze(0).to(self.device)
+        
+        pil_images = []
+        with torch.cuda.amp.autocast(enabled=self.fp16):
+            with torch.no_grad():
+                context, context_mask = self.t5_encoder(condition_model_input)
+            
+            k, m = images_num // bs, images_num % bs
+            for minibatch in [bs] * k + [m]:
+                if minibatch == 0:
+                    continue
+                bs_context = repeat(context, '1 n d -> b n d', b=minibatch)
+                bs_context_mask = repeat(context_mask, '1 n -> b n', b=minibatch)
+
+                images = base_diffusion.p_sample_loop(
+                    self.unet, (minibatch, 4, 128, 128), self.device, 
+                    bs_context, bs_context_mask, self.null_embedding, guidance_scale
+                )
+
+                with torch.no_grad():
+                    images = torch.cat([self.movq.decode(image) for image in images.chunk(2)])
+                    images = torch.clip((images + 1.) / 2., 0., 1.)
+                    for images_chunk in images.chunk(1):
+                        pil_images += [self.to_pil(image) for image in images_chunk]
+
+        return pil_images
