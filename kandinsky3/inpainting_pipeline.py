@@ -83,7 +83,7 @@ class Kandinsky3InpaintingPipeline:
         condition_model_input = self.t5_processor.encode(text=text)
         batch = {
             'image': self.to_tensor(resize_image_for_diffusion(image.convert("RGB"))) * 2 - 1,
-            'mask': 1 - self.to_tensor(resize_mask_for_diffusion(mask)),
+            'mask': 1 - self.to_tensor(resize_image_for_diffusion(mask.convert('L'))),
             'text' : condition_model_input
         }
         batch['mask'] = batch['mask'].type(torch.float32)
