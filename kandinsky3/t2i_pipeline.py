@@ -54,8 +54,9 @@ class Kandinsky3T2IPipeline:
         guidance_scale: float = 3.0,
         steps: int = 50
     ) -> List[PIL.Image.Image]:
+
         betas = get_named_beta_schedule('cosine', steps)
-        base_diffusion = BaseDiffusion(betas, 0.98)
+        base_diffusion = BaseDiffusion(betas, 0.99)
         
         condition_model_input = self.t5_processor.encode(text)
         for key in condition_model_input:

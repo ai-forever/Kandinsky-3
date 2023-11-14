@@ -123,12 +123,25 @@ def get_movq(
 
 def get_inpainting_unet(
     device: Union[str, torch.device],
-    config_path: str,
     weights_path: Optional[str] = None, 
     fp16: bool = False
-) -> (omegaconf.DictConfig, UNet, Optional[dict], Optional[torch.Tensor]):
-    conf = OmegaConf.load(config_path)
-    inpaint_unet = UNet(**conf.model.unet_params)
+) -> (UNet, Optional[dict], Optional[torch.Tensor]):
+
+    inpaint_unet = UNet(
+        model_channels=384,
+        num_channels=9,
+        init_channels=192,
+        time_embed_dim=1536,
+        context_dim=4096,
+        groups=32,
+        head_dim=64,
+        expansion_ratio=4,
+        compression_ratio=2,
+        dim_mult=(1, 2, 4, 8),
+        num_blocks=(3, 3, 3, 3),
+        add_cross_attention=(False, True, True, True),
+        add_self_attention=(False, True, True, True),
+    )
 
     # load weights
     null_embedding = None
@@ -157,11 +170,6 @@ def get_inpainting_unet(
             for key, value in ema_state_dict.items()  if 'unet' in key
         }
         
-        if unet_state_dict['in_layer.weight'].shape[1] == 4:
-            unet.state_dict()['in_layer.weight'].zero_()
-            unet.state_dict()['in_layer.weight'][:, :4] = unet_state_dict['in_layer.weight']
-            del unet_state_dict['in_layer.weight']
-        
         inpaint_unet.load_state_dict(unet_state_dict, strict=False)
     
     if fp16:
@@ -169,4 +177,4 @@ def get_inpainting_unet(
     
     inpaint_unet.eval().to(device)
 
-    return conf, inpaint_unet, null_embedding, projections_state_dict
+    return inpaint_unet, null_embedding, projections_state_dict
