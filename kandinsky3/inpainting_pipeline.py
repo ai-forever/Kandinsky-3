@@ -102,12 +102,11 @@ class Kandinsky3InpaintingPipeline:
         bs: int = 1, 
         steps: int = 50,
         guidance_weight_text: float = 4,
-        use_mask_text: bool = False
     ) -> List[PIL.Image.Image]:
     
         with torch.no_grad():
             batch = self.prepare_batch(text, image, mask)
-            processed = self.shared_step(batch, use_mask_text=use_mask_text)
+            processed = self.shared_step(batch)
         
         context_mask = processed['context_mask'].repeat_interleave(bs, dim=0)
         context = processed['context'].repeat_interleave(bs, dim=0)
