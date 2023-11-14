@@ -3,6 +3,7 @@ import numpy as np
 from scipy.interpolate import interp1d
 from matplotlib.path import Path
 import torch.nn as nn
+from skimage.transform import resize
 
 
 def load_conf(config_path):
@@ -34,6 +35,20 @@ def zero_module(module):
     for p in module.parameters():
         nn.init.zeros_(p)
     return module
+
+def resize_mask_for_diffusion(mask):
+    reduce_factor = max(1, (mask.size / 1024**2)**0.5)
+    resized_mask = resize(
+        mask,
+        (
+            (round(mask.shape[0] / reduce_factor) // 64) * 64,
+            (round(mask.shape[1] / reduce_factor) // 64) * 64
+        ),
+        preserve_range=True,
+        anti_aliasing=False
+    )
+
+    return resized_mask
 
 def resize_image_for_diffusion(image):
     reduce_factor = max(1, (image.size[0] * image.size[1] / 1024**2)**0.5)

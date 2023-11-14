@@ -49,6 +49,8 @@ class Kandinsky3T2IPipeline:
         text: str, 
         images_num: int = 1, 
         bs: int = 1, 
+        width: int = 1024,
+        height: int = 1024,
         guidance_scale: float = 3.0,
         steps: int = 50
     ) -> List[PIL.Image.Image]:
@@ -65,20 +67,18 @@ class Kandinsky3T2IPipeline:
         with torch.cuda.amp.autocast(enabled=self.fp16):
             with torch.no_grad():
                 context, context_mask = self.t5_encoder(condition_model_input)
-            
-            k, m = images_num // bs, images_num % bs
-            for minibatch in [bs] * k + [m]:
-                if minibatch == 0:
-                    continue
-                bs_context = repeat(context, '1 n d -> b n d', b=minibatch)
-                bs_context_mask = repeat(context_mask, '1 n -> b n', b=minibatch)
+                k, m = images_num // bs, images_num % bs
+                for minibatch in [bs] * k + [m]:
+                    if minibatch == 0:
+                        continue
+                    bs_context = repeat(context, '1 n d -> b n d', b=minibatch)
+                    bs_context_mask = repeat(context_mask, '1 n -> b n', b=minibatch)
 
-                images = base_diffusion.p_sample_loop(
-                    self.unet, (minibatch, 4, 128, 128), self.device, 
-                    bs_context, bs_context_mask, self.null_embedding, guidance_scale
-                )
+                    images = base_diffusion.p_sample_loop(
+                        self.unet, (minibatch, 4, height//8, width//8), self.device, 
+                        bs_context, bs_context_mask, self.null_embedding, guidance_scale
+                    )
 
-                with torch.no_grad():
                     images = torch.cat([self.movq.decode(image) for image in images.chunk(2)])
                     images = torch.clip((images + 1.) / 2., 0., 1.)
                     for images_chunk in images.chunk(1):

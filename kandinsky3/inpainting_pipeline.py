@@ -20,7 +20,7 @@ from kandinsky3.movq import MoVQ
 from kandinsky3.condition_encoders import T5TextConditionEncoder
 from kandinsky3.condition_processors import T5TextConditionProcessor
 from kandinsky3.model.diffusion import BaseDiffusion, get_named_beta_schedule
-from kandinsky3.utils import generate_mask, resize_image_for_diffusion
+from kandinsky3.utils import resize_image_for_diffusion, resize_mask_for_diffusion
 
 
 class Kandinsky3InpaintingPipeline:
@@ -78,14 +78,15 @@ class Kandinsky3InpaintingPipeline:
         self, 
         text: str, 
         image: PIL.Image.Image,
-        mask: PIL.Image.Image,
+        mask: np.ndarray,
     ) -> dict:
         condition_model_input = self.t5_processor.encode(text=text)
         batch = {
             'image': self.to_tensor(resize_image_for_diffusion(image.convert("RGB"))) * 2 - 1,
-            'mask': 1 - self.to_tensor(resize_image_for_diffusion(mask.convert('L'))),
+            'mask': 1 - self.to_tensor(resize_mask_for_diffusion(mask)),
             'text' : condition_model_input
         }
+        batch['mask'] = batch['mask'].type(torch.float32)
         
         batch['image'] = batch['image'].unsqueeze(0).to(self.device)
         batch['text']['t5']['input_ids'] = batch['text']['t5']['input_ids'].unsqueeze(0).to(self.device)
@@ -97,7 +98,7 @@ class Kandinsky3InpaintingPipeline:
         self, 
         text: str, 
         image: PIL.Image.Image,
-        mask: PIL.Image.Image,
+        mask: np.ndarray,
         images_num: int = 1, 
         bs: int = 1, 
         steps: int = 50,
