@@ -7,3 +7,5 @@
 ## Kandinsky example
 
 ## Kandinsky Inpainting example
+
+## Contributors
