@@ -51,9 +51,9 @@ class ConditionEncoder(nn.Module):
 
 class T5TextConditionEncoder(ConditionEncoder):
 
-    def __init__(self, model_names, context_dim, model_dims):
+    def __init__(self, model_names, context_dim, model_dims, low_cpu_mem_usage: bool = True, device_map: Optional[str] = None):
         super().__init__(context_dim, model_dims)
-        t5_model = T5Model.from_pretrained(model_names['t5'])
+        t5_model = T5Model.from_pretrained(model_names['t5'], low_cpu_mem_usage=low_cpu_mem_usage, device_map=device_map)
         self.encoders = nn.ModuleDict({
             't5': t5_model.encoder.half(),
         })

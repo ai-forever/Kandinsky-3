@@ -75,18 +75,23 @@ def get_T5encoder(
     device: Union[str, torch.device],
     weights_path: str, 
     projections_state_dict: Optional[dict] = None,
-    fp16: bool = True
+    fp16: bool = True,
+    low_cpu_mem_usage: bool = True,
+    device_map: Optional[str] = None
 ) -> (UNet, Optional[dict], Optional[torch.Tensor]):
     model_names = {'t5': weights_path}
     tokens_length = {'t5': 128}
     context_dim = 4096
     model_dims = {'t5': 4096}
     processor = T5TextConditionProcessor(tokens_length, model_names)
-    condition_encoders = T5TextConditionEncoder(model_names, context_dim, model_dims)
-    condition_encoders = condition_encoders.eval().to(device)
+    condition_encoders = T5TextConditionEncoder(
+        model_names, context_dim, model_dims, low_cpu_mem_usage=low_cpu_mem_usage, device_map=device_map
+    )
     
     if projections_state_dict:
         condition_encoders.projections.load_state_dict(projections_state_dict)
+        
+    condition_encoders = condition_encoders.eval().to(device)
     return processor, condition_encoders
 
 
