@@ -73,20 +73,7 @@ class BaseDiffusion:
         sqrt_alphas_cumprod = get_tensor_items(self.sqrt_alphas_cumprod, t, x_start.shape)
         sqrt_one_minus_alphas_cumprod = get_tensor_items(self.sqrt_one_minus_alphas_cumprod, t, noise.shape)
         x_t = sqrt_alphas_cumprod * x_start + sqrt_one_minus_alphas_cumprod * noise
-        if mask is not None:
-            x_t = mask * x_start + (1. - mask) * x_t
         return x_t
-
-    def inp_q_sample(self, x_t, t, l, noise=None):
-        if noise is None:
-            noise = self.gen_noise(x_t)
-
-        res = get_tensor_items(self.alphas_cumprod, t + l, x_t.shape) / get_tensor_items(self.alphas_cumprod, t, x_t.shape)
-        sqrt_alphas_cumprod = torch.sqrt(res)
-        sqrt_one_minus_alphas_cumprod = torch.sqrt(1 - res + 1e-8)
-
-        x_t_l = sqrt_alphas_cumprod * x_t + sqrt_one_minus_alphas_cumprod * noise
-        return x_t_l
 
     def q_posterior_mean_variance(self, x_start, x_t, t):
         posterior_mean_coef_1 = get_tensor_items(self.posterior_mean_coef_1, t, x_start.shape)
@@ -97,7 +84,7 @@ class BaseDiffusion:
         posterior_log_variance = get_tensor_items(self.posterior_log_variance, t, x_start.shape)
         return posterior_mean, posterior_variance, posterior_log_variance
 
-    def text_guidance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0, 
+    def text_guidance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, 
                         mask=None, masked_latent=None):
         large_x = x.repeat(2, 1, 1, 1)
         large_t = t.repeat(2)
@@ -113,11 +100,8 @@ class BaseDiffusion:
             mask = mask.repeat(2, 1, 1, 1)
         if masked_latent is not None:
             masked_latent = masked_latent.repeat(2, 1, 1, 1)
-
-        if model.in_layer.in_channels == 5:
-            large_x = torch.cat([large_x, mask], dim=1)
         
-        elif model.in_layer.in_channels == 9:
+        if model.in_layer.in_channels == 9:
             large_x = torch.cat([large_x, mask, masked_latent], dim=1)
         
         pred_large_noise = model(large_x, large_t * self.time_scale, large_context, large_context_mask.bool())
@@ -125,14 +109,10 @@ class BaseDiffusion:
         pred_noise = (guidance_weight_text + 1.) * pred_noise - guidance_weight_text * uncond_pred_noise
         return pred_noise
 
-    def p_mean_variance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0, 
-                        mask=None, masked_latent=None, unconditional_mask=None, unconditional_latent=None):
+    def p_mean_variance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text,
+                        mask=None, masked_latent=None):
         
-        if guidance_weight_image == 1.0:
-            pred_noise = self.text_guidance(model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image, mask, masked_latent)
-        else:
-            pred_noise = self.txt_img_guidance(model, x, t, context, context_mask, null_embedding, guidance_weight_text - 1, guidance_weight_image, 
-                                                mask, masked_latent, unconditional_mask=unconditional_mask, unconditional_latent=unconditional_latent)
+        pred_noise = self.text_guidance(model, x, t, context, context_mask, null_embedding, guidance_weight_text, mask, masked_latent)
 
         sqrt_one_minus_alphas_cumprod = get_tensor_items(self.sqrt_one_minus_alphas_cumprod, t, pred_noise.shape)
         sqrt_alphas_cumprod = get_tensor_items(self.sqrt_alphas_cumprod, t, pred_noise.shape)
@@ -143,12 +123,12 @@ class BaseDiffusion:
         return pred_mean, pred_var, pred_log_var
 
     @torch.no_grad()
-    def p_sample(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0, 
-                mask=None, masked_latent=None, unconditional_mask=None, unconditional_latent=None):
+    def p_sample(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text,
+                mask=None, masked_latent=None):
         bs = x.shape[0]
         ndims = len(x.shape[1:])
-        pred_mean, _, pred_log_var = self.p_mean_variance(model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=guidance_weight_image,
-                                                          mask=mask, masked_latent=masked_latent, unconditional_mask=unconditional_mask, unconditional_latent=unconditional_latent)
+        pred_mean, _, pred_log_var = self.p_mean_variance(model, x, t, context, context_mask, null_embedding, guidance_weight_text,
+                                                          mask=mask, masked_latent=masked_latent)
         noise = torch.randn_like(x)
         mask = (t != 0).reshape(bs, *((1,) * ndims))
         sample = pred_mean + mask * torch.exp(0.5 * pred_log_var) * noise
@@ -156,46 +136,19 @@ class BaseDiffusion:
 
     @torch.no_grad()
     def p_sample_loop(self, model, shape, device, context, context_mask, null_embedding, guidance_weight_text, 
-                        guidance_weight_image=1.0, mask=None, masked_latent=None, image_latent=None, vae=None, strength=1.0):
+                        mask=None, masked_latent=None):
         
-        if image_latent is None:
-            img = torch.randn(*shape, device=device)
-            t_start = self.num_timesteps
-        else:
-            init_timestep = min(int(self.num_timesteps * strength), self.num_timesteps)
-            t_start = max(self.num_timesteps - init_timestep, 0)
-            img = self.q_sample(image_latent, init_timestep)
-        
-        unconditional_mask = None
-        unconditional_latent = None
-        if mask is not None and masked_latent is not None:
-            unconditional_mask = torch.zeros_like(mask)
-            unconditional_latent = torch.nn.functional.interpolate(unconditional_mask, size=(masked_latent.shape[2] * 8, masked_latent.shape[3] * 8)).repeat_interleave(3, dim=1)
-            unconditional_latent = vae.encode(unconditional_latent)
-
+        img = torch.randn(*shape, device=device)
+        t_start = self.num_timesteps
         time = list(range(t_start))[::-1]
         
         for time in tqdm(time, position=0):
             time = torch.tensor([time] * shape[0], device=device)
             img = self.p_sample(
-                model, img, time, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image, 
-                mask=mask, masked_latent=masked_latent, unconditional_mask=unconditional_mask, 
-                unconditional_latent=unconditional_latent
+                model, img, time, context, context_mask, null_embedding, guidance_weight_text, 
+                mask=mask, masked_latent=masked_latent
             )
         return img
-
-    @torch.no_grad()
-    def inp_p_sample(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0,
-                     mask=None, masked_latent=None, image_latent=None, unconditional_mask=None, unconditional_latent=None):
-        bs = x.shape[0]
-        ndims = len(x.shape[1:])
-        pred_mean, _, pred_log_var = self.inp_p_mean_variance(model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=guidance_weight_image, 
-                                                              mask=mask, masked_latent=masked_latent, unconditional_mask=unconditional_mask, unconditional_latent=unconditional_latent)
-        noise = torch.randn_like(x)
-        mask = (t != 0).reshape(bs, *((1,) * ndims))
-        sample = pred_mean + mask * torch.exp(0.5 * pred_log_var) * noise
-        return sample
-
 
 
 def get_diffusion(conf):

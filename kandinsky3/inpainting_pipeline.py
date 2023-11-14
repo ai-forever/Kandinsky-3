@@ -28,7 +28,6 @@ class Kandinsky3InpaintingPipeline:
     def __init__(
         self, 
         device: Union[str, torch.device], 
-        config: omegaconf.DictConfig,
         unet: UNet,
         null_embedding: torch.Tensor,
         t5_processor: T5TextConditionProcessor,
@@ -37,7 +36,6 @@ class Kandinsky3InpaintingPipeline:
         fp16: bool = True
     ):
         self.device = device
-        self.config = config
         self.fp16 = fp16
         self.to_pil = T.ToPILImage()
         self.to_tensor = T.ToTensor()
@@ -48,13 +46,9 @@ class Kandinsky3InpaintingPipeline:
         self.t5_encoder = t5_encoder
         self.movq = movq
         
-    def shared_step(self, batch: dict, use_mask_text: bool = False) -> dict:
+    def shared_step(self, batch: dict) -> dict:
         image = batch['image']
-
-        if use_mask_text:
-            condition_model_input = batch['mask_text']
-        else:
-            condition_model_input = batch['text']
+        condition_model_input = batch['text']
         
         bs = image.shape[0]
         
@@ -107,11 +101,10 @@ class Kandinsky3InpaintingPipeline:
         images_num: int = 1, 
         bs: int = 1, 
         steps: int = 50,
-        guidance_weight_text: float = 10,
-        guidance_weight_image: float = 1,
-        strength: float = 1,
+        guidance_weight_text: float = 4,
         use_mask_text: bool = False
     ) -> List[PIL.Image.Image]:
+    
         with torch.no_grad():
             batch = self.prepare_batch(text, image, mask)
             processed = self.shared_step(batch, use_mask_text=use_mask_text)
@@ -121,11 +114,6 @@ class Kandinsky3InpaintingPipeline:
 
         mask = processed['mask'].repeat_interleave(bs, dim=0) 
         masked_latent = processed['masked_latent'].repeat_interleave(bs, dim=0)
-
-        if strength != 1.0:
-            image_latent = processed['image'].repeat_interleave(bs, dim=0)
-        else: 
-            image_latent = None
         
         bs = masked_latent.shape[0]
         
@@ -137,9 +125,8 @@ class Kandinsky3InpaintingPipeline:
             with torch.no_grad():
                 images = base_diffusion.p_sample_loop(
                     self.unet, (bs, 4, masked_latent.shape[2], masked_latent.shape[3]), self.device, 
-                    context, context_mask, self.null_embedding, guidance_weight_text,
-                    guidance_weight_image=guidance_weight_image, mask=mask, masked_latent=masked_latent, 
-                    image_latent=image_latent, vae=self.movq
+                    context, context_mask, self.null_embedding, guidance_weight_text, 
+                    mask=mask, masked_latent=masked_latent, 
                 )
 
                 images = self.movq.decode(images)
