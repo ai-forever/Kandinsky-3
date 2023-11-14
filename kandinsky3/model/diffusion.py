@@ -97,45 +97,6 @@ class BaseDiffusion:
         posterior_log_variance = get_tensor_items(self.posterior_log_variance, t, x_start.shape)
         return posterior_mean, posterior_variance, posterior_log_variance
 
-    def txt_img_guidance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0, 
-                        mask=None, masked_latent=None, unconditional_mask=None, unconditional_latent=None):
-        large_x = x.repeat(3, 1, 1, 1)
-        large_t = t.repeat(3)
-        
-        uncondition_context = torch.zeros_like(context)
-        uncondition_context_mask = torch.zeros_like(context_mask)
-        uncondition_context[:, 0] = null_embedding
-        uncondition_context_mask[:, 0] = 1
-
-
-        large_context = torch.cat([context, uncondition_context, uncondition_context])
-        large_context_mask = torch.cat([context_mask, uncondition_context_mask, uncondition_context_mask])
-        
-        if mask is not None:
-            mask = mask.repeat(2, 1, 1, 1)
-            mask = torch.cat([mask, unconditional_mask])
-
-        if masked_latent is not None:
-
-            masked_latent = masked_latent.repeat(2, 1, 1, 1)
-
-            masked_latent = torch.cat([masked_latent, unconditional_latent])
-
-        if model.in_layer.in_channels == 5:
-            large_x = torch.cat([large_x, mask], dim=1)
-        
-        elif model.in_layer.in_channels == 9:
-            large_x = torch.cat([large_x, mask, masked_latent], dim=1)
-        
-        pred_large_noise = model(large_x, large_t * self.time_scale, large_context, large_context_mask.bool())
-
-        pred_noise, pred_image_noise, uncond_pred_noise = torch.chunk(pred_large_noise, 3)
-
-        # pdb.set_trace()
-
-        pred_noise = uncond_pred_noise + guidance_weight_text * (pred_noise - pred_image_noise) + guidance_weight_image * (pred_image_noise - uncond_pred_noise)
-        return pred_noise
-
     def text_guidance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0, 
                         mask=None, masked_latent=None):
         large_x = x.repeat(2, 1, 1, 1)
@@ -177,31 +138,6 @@ class BaseDiffusion:
         sqrt_alphas_cumprod = get_tensor_items(self.sqrt_alphas_cumprod, t, pred_noise.shape)
         pred_x_start = (x - sqrt_one_minus_alphas_cumprod * pred_noise) / sqrt_alphas_cumprod
         pred_x_start = self.process_x_start(pred_x_start)
-
-        pred_mean, pred_var, pred_log_var = self.q_posterior_mean_variance(pred_x_start, x, t)
-        return pred_mean, pred_var, pred_log_var
-
-    def inp_p_mean_variance(self, model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=1.0, 
-                            mask=None, masked_latent=None, unconditional_mask=None, unconditional_latent=None):
-       
-        if guidance_weight_image == 1.0:
-            pred_noise = self.text_guidance(model, x, t, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image, mask, masked_latent)
-        else:
-            pred_noise = self.txt_img_guidance(model, x, t, context, context_mask, null_embedding, guidance_weight_text - 1, guidance_weight_image, 
-                                                mask, masked_latent, unconditional_mask=unconditional_mask, unconditional_latent=unconditional_latent)
-
-        # coef = get_tensor_items(torch.log(1 + 2 * self.posterior_variance), t, mask.shape)
-        # guidance_mask = mask * coef * guidance_weight
-        # print(guidance_mask.shape)
-        # print(pred_noise * guidance_mask)
-        # pred_noise = (guidance_mask + 1.) * pred_noise - guidance_mask * uncond_pred_noise
-
-        sqrt_one_minus_alphas_cumprod = get_tensor_items(self.sqrt_one_minus_alphas_cumprod, t, pred_noise.shape)
-        sqrt_alphas_cumprod = get_tensor_items(self.sqrt_alphas_cumprod, t, pred_noise.shape)
-        pred_x_start = (x - sqrt_one_minus_alphas_cumprod * pred_noise) / sqrt_alphas_cumprod
-        pred_x_start = self.process_x_start(pred_x_start)
-
-        pred_x_start = mask * masked_latent + (1. - mask) * pred_x_start
 
         pred_mean, pred_var, pred_log_var = self.q_posterior_mean_variance(pred_x_start, x, t)
         return pred_mean, pred_var, pred_log_var
@@ -259,34 +195,6 @@ class BaseDiffusion:
         mask = (t != 0).reshape(bs, *((1,) * ndims))
         sample = pred_mean + mask * torch.exp(0.5 * pred_log_var) * noise
         return sample
-
-    @torch.no_grad()
-    def inp_p_sample_loop(self, model, shape, device, context, context_mask, null_embedding, guidance_weight_text, 
-                          guidance_weight_image=0.0, mask=None, masked_latent=None, image_latent=None, vae=None,  strength=1.0):
-        
-        if image_latent is None:
-            img = torch.randn(*shape, device=device)
-            t_start = self.num_timesteps
-        else:
-            init_timestep = min(int(self.num_timesteps * strength), self.num_timesteps)
-            t_start = max(self.num_timesteps - init_timestep, 0)
-            img = self.q_sample(image_latent, init_timestep)
-
-        if mask is not None and masked_latent is not None:
-            unconditional_mask = torch.zeros_like(mask)
-            unconditional_latent = torch.nn.functional.interpolate(unconditional_mask, size=(masked_latent.shape[2] * 8, masked_latent.shape[3] * 8)).repeat_interleave(3, dim=1)
-            unconditional_latent = vae.encode(unconditional_latent)
-
-        time = list(range(self.num_timesteps))[::-1]
-        for time in tqdm(time, position=0):
-            tensor_time = torch.tensor([time] * shape[0], device=device)
-            L = min(self.num_timesteps - time - 1, self.jump_length)
-            img = self.inp_q_sample(img, tensor_time, L)
-            for i in range(L+1, 0, -1):
-                img = self.inp_p_sample(model, img, tensor_time + i - 1, context, context_mask, null_embedding, guidance_weight_text, guidance_weight_image=guidance_weight_image,
-                                        mask=mask, masked_latent=masked_latent, image_latent=image_latent, unconditional_mask=unconditional_mask, unconditional_latent=unconditional_latent)           
-        return img
-
 
 
 
