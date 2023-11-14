@@ -4,6 +4,7 @@ import torch
 from torch import nn
 from einops import repeat
 from transformers import T5Model, CLIPModel
+from typing import Optional
 
 from .utils import freeze
 
