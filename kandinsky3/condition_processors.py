@@ -44,7 +44,8 @@ class T5TextConditionProcessor:
             negative_encoded = self.processor(negative_text, max_length=self.tokens_length, truncation=True)
             negative_input_ids = negative_encoded['input_ids'][:len(encoded['input_ids'])]
             negative_input_ids[-1] = self.processor.eos_token_id
-            negative_input_ids = negative_input_ids + [self.processor.pad_token_id] * pad_length
+            negative_pad_length = self.tokens_length - len(negative_input_ids)
+            negative_input_ids = negative_input_ids + [self.processor.pad_token_id] * negative_pad_length
             negative_attention_mask = encoded['attention_mask'] + [0] * pad_length
             negative_condition_model_input = {'t5': {
                 'input_ids': torch.tensor(negative_input_ids, dtype=torch.long),
