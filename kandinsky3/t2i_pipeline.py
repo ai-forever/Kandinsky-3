@@ -46,8 +46,9 @@ class Kandinsky3T2IPipeline:
         
     def __call__(
         self, 
-        text: str, 
-        images_num: int = 1, 
+        text: str,
+        negative_text: str = '',
+        images_num: int = 1,
         bs: int = 1, 
         width: int = 1024,
         height: int = 1024,
@@ -62,11 +63,26 @@ class Kandinsky3T2IPipeline:
         for key in condition_model_input:
             for input_type in condition_model_input[key]:
                 condition_model_input[key][input_type] = condition_model_input[key][input_type].unsqueeze(0).to(self.device)
+
+        if len(negative_text) > 0:
+            negative_condition_model_input = self.t5_processor.encode(negative_text)
+            for key in condition_model_input:
+                for input_type in negative_condition_model_input[key]:
+                    negative_condition_model_input[key][input_type] = negative_condition_model_input[key][input_type].unsqueeze(0).to(self.device)
         
         pil_images = []
         with torch.cuda.amp.autocast(enabled=self.fp16):
             with torch.no_grad():
                 context, context_mask = self.t5_encoder(condition_model_input)
+
+                if len(negative_text) > 0:
+                    negative_context, negative_context_mask = torch.zeros_like(context), torch.zeros_like(context_mask)
+                    true_negative_context, true_negative_context_mask = self.t5_encoder(negative_condition_model_input)
+                    negative_context[:, :true_negative_context.shape[1]] = true_negative_context[:, :context.shape[1]]
+                    negative_context_mask[:, :true_negative_context.shape[1]] = true_negative_context_mask[:, :context.shape[1]]
+                else:
+                    negative_context, negative_context_mask = None, None
+
                 k, m = images_num // bs, images_num % bs
                 for minibatch in [bs] * k + [m]:
                     if minibatch == 0:
@@ -76,7 +92,8 @@ class Kandinsky3T2IPipeline:
 
                     images = base_diffusion.p_sample_loop(
                         self.unet, (minibatch, 4, height//8, width//8), self.device, 
-                        bs_context, bs_context_mask, self.null_embedding, guidance_scale
+                        bs_context, bs_context_mask, self.null_embedding, guidance_scale,
+                        negative_context=negative_context, negative_context_mask=negative_context_mask
                     )
 
                     images = torch.cat([self.movq.decode(image) for image in images.chunk(2)])
