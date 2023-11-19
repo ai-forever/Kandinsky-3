@@ -1,5 +1,6 @@
 from omegaconf import OmegaConf
 import numpy as np
+from scipy import ndimage
 from scipy.interpolate import interp1d
 from matplotlib.path import Path
 import torch.nn as nn
@@ -57,3 +58,16 @@ def resize_image_for_diffusion(image):
     ))
 
     return image
+
+def prepare_mask(mask):
+    ker = np.array([[1, 1,  1, 1, 1],
+        [1, 5,  5, 5, 1],
+        [1, 5, 44, 5, 1],
+        [1, 5,  5, 5, 1],
+        [1, 1,  1, 1, 1]]) / 100
+    out = ndimage.convolve(mask, ker)
+    out = ndimage.convolve(out, ker)
+    out = ndimage.convolve(out, ker)
+
+    mask = (out > 0).astype(int)
+    return mask
