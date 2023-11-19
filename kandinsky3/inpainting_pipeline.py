@@ -80,7 +80,7 @@ class Kandinsky3InpaintingPipeline:
         image: PIL.Image.Image,
         mask: np.ndarray,
     ) -> dict:
-        condition_model_input = self.t5_processor.encode(text=text)
+        condition_model_input, _ = self.t5_processor.encode(text=text)
         batch = {
             'image': self.to_tensor(resize_image_for_diffusion(image.convert("RGB"))) * 2 - 1,
             'mask': 1 - self.to_tensor(resize_mask_for_diffusion(mask)),
