@@ -124,39 +124,42 @@ class Kandinsky3InpaintingPipeline:
         with torch.no_grad():
             batch = self.prepare_batch(text, negative_text, image, mask)
             processed = self.shared_step(batch)
-        
-        bs_context_mask = processed['context_mask'].repeat_interleave(bs, dim=0)
-        bs_context = processed['context'].repeat_interleave(bs, dim=0)
-
-        if processed['negative_context'] is not None:
-            bs_negative_context_mask = processed['negative_context_mask'].repeat_interleave(bs, dim=0)
-            bs_negative_context = processed['negative_context'].repeat_interleave(bs, dim=0)
-        else:
-            bs_negative_context, bs_negative_context_mask = None, None
-
-        mask = processed['mask'].repeat_interleave(bs, dim=0) 
-        masked_latent = processed['masked_latent'].repeat_interleave(bs, dim=0)
-        
-        bs = masked_latent.shape[0]
-        
+            
         betas = get_named_beta_schedule('cosine', 50)
         base_diffusion = BaseDiffusion(betas, percentile=0.95)
+        
+        pil_images = []
+        k, m = images_num // bs, images_num % bs
+        for minibatch in [bs] * k + [m]:
+            if minibatch == 0:
+                continue
+            bs_context_mask = processed['context_mask'].repeat_interleave(minibatch, dim=0)
+            bs_context = processed['context'].repeat_interleave(minibatch, dim=0)
 
-        pil_images = []    
-        with torch.cuda.amp.autocast(enabled=self.fp16):
-            with torch.no_grad():
-                images = base_diffusion.p_sample_loop(
-                    self.unet, (bs, 4, masked_latent.shape[2], masked_latent.shape[3]), self.device, 
-                    bs_context, bs_context_mask, self.null_embedding, guidance_weight_text, 
-                    negative_context=bs_negative_context, negative_context_mask=bs_negative_context_mask,
-                    mask=mask, masked_latent=masked_latent, 
-                )
+            if processed['negative_context'] is not None:
+                bs_negative_context_mask = processed['negative_context_mask'].repeat_interleave(minibatch, dim=0)
+                bs_negative_context = processed['negative_context'].repeat_interleave(minibatch, dim=0)
+            else:
+                bs_negative_context, bs_negative_context_mask = None, None
 
-                images = self.movq.decode(images)
-            
-        images = torch.clip((images + 1.) / 2., 0., 1.).cpu()
+            mask = processed['mask'].repeat_interleave(minibatch, dim=0) 
+            masked_latent = processed['masked_latent'].repeat_interleave(minibatch, dim=0)
 
-        for images_chunk in images.chunk(1):
-            pil_images += [self.to_pil(image) for image in images_chunk]
+            minibatch = masked_latent.shape[0]
+
+            with torch.cuda.amp.autocast(enabled=self.fp16):
+                with torch.no_grad():
+                    images = base_diffusion.p_sample_loop(
+                        self.unet, (minibatch, 4, masked_latent.shape[2], masked_latent.shape[3]), self.device, 
+                        bs_context, bs_context_mask, self.null_embedding, guidance_weight_text, 
+                        negative_context=bs_negative_context, negative_context_mask=bs_negative_context_mask,
+                        mask=mask, masked_latent=masked_latent, 
+                    )
+
+                    images = torch.cat([self.movq.decode(image) for image in images.chunk(2)])
+            images = torch.clip((images + 1.) / 2., 0., 1.).cpu()
+
+            for images_chunk in images.chunk(1):
+                pil_images += [self.to_pil(image) for image in images_chunk]
 
         return pil_images
