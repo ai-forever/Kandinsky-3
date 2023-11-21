@@ -4,11 +4,11 @@
 
 [Post] | [Fusion Brain](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) |
 
-**Description:**
+## Description:
 
-Kandinsky 3.0 is text-to-image diffusion model
+Kandinsky 3.0 is an open source text-to-image diffusion model
 
-**Architecture details:**
+## Architecture details:
 
 ![](assets/kandinsky.jpg)
 
@@ -17,7 +17,7 @@ Kandinsky 3.0 is text-to-image diffusion model
 + MoVQ encoder/decoder - 267M
 
 
-**Сheckpoints:**
+## Сheckpoints:
 
 + [Base](): Base text-to-image diffusion model 
 + [Inpainting](): Inpainting version of the model
@@ -69,10 +69,10 @@ Check our jupyter notebooks with examples in `./examples` folder
 ## Authors
 
 + Vladimir Arkhipkin: [Github](https://github.com/oriBetelgeuse)
-+ Anastasia Maltseva [Github] ()
-+ Andrei Filatov [Github]
++ Anastasia Maltseva [Github](https://github.com/NastyaMittseva)
++ Andrei Filatov [Github](https://github.com/anvilarth)
 + Igor Pavlov: [Github](https://github.com/boomb0om)
-+ Julia Agaphonova [Github]()
++ Julia Agafonova 
 + Arseniy Shakhmatov: [Github](https://github.com/cene555), [Blog](https://t.me/gradientdip)
-+ Andrey Kuznetsov: [Github](https://github.com/kuznetsoffandrey)
-+ Denis Dimitrov: [Github](https://github.com/denndimitrov)
++ Andrey Kuznetsov: [Github](https://github.com/kuznetsoffandrey), [Blog](https://t.me/complete_ai)
++ Denis Dimitrov: [Github](https://github.com/denndimitrov), [Blog](https://t.me/dendi_math_ai)
