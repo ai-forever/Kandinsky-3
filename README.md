@@ -1,11 +1,6 @@
 # Kandinsky-3
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1MfN9dfmejT8NjXhR353NeP5RzbruHgo7?usp=sharing) — Inference example
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1MfN9dfmejT8NjXhR353NeP5RzbruHgo7?usp=sharing) — Inference Inpainting example
-
-
-+ [Habr post](https://habr.com/ru/companies/sberbank/articles/747446/)
++ [Habr post](https://github.com/ai-forever/Kandinsky-3)
 + [Demo fusionbrain.ai](https://fusionbrain.ai/diffusion)
 + [Telegram-bot](https://t.me/kandinsky21_bot)
 
