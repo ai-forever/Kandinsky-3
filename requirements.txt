@@ -23,3 +23,5 @@ wandb
 albumentations
 bezier
 scipy
+Pillow
+tqdm
