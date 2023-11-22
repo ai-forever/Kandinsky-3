@@ -2,7 +2,7 @@
 
 ![](assets/title.jpg)
 
-[Post] | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Report]
+[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Report]
 
 ## Description:
 
