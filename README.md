@@ -8,7 +8,7 @@
 
 Kandinsky 3.0 is an open-source text-to-image diffusion model built upon the Kandinsky2-x model family. In comparison to its predecessors, Kandinsky 3.0 incorporates more data and specifically related to Russian culture, which allows to generate pictures related to Russin culture. Furthermore, enhancements have been made to the text understanding and visual quality of the model, achieved by increasing the size of the text encoder and Diffusion U-Net models, respectively.
 
-For more information: details of training, example of generations check out our [post](). The english version will be released in a couple of days.
+For more information: details of training, example of generations check out our [post](https://habr.com/ru/companies/sberbank/articles/775590/). The english version will be released in a couple of days.
 
 ## Architecture details:
 
