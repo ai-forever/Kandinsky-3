@@ -51,9 +51,8 @@ Check our jupyter notebooks with examples in `./examples` folder
 ```python
 from kandinsky3 import get_T2I_pipeline
 
-t2v_pipe = get_T2I_pipeline('cuda', fp16=True)
+t2i_pipe = get_T2I_pipeline('cuda', fp16=True)
 
-pfps = 'medium' # ['low', 'medium', 'high']
 image = t2i_pipe( "A cute corgi lives in a house made out of sushi.")
 ```
 
