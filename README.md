@@ -27,8 +27,45 @@ Architecture consists of three parts:
 
 We release our two models:
 
-+ [Base](): Base text-to-image diffusion model. This model was trained over 2M steps on 400 A100
-+ [Inpainting](): Inpainting version of the model. The model was initialized from final checkpoint of base model and trained 250k steps on 300 A100.
++ Base: Base text-to-image diffusion model. This model was trained over 2M steps on 400 A100
++ Inpainting: Inpainting version of the model. The model was initialized from final checkpoint of base model and trained 250k steps on 300 A100.
+
+
+Weights of the model are loaded internally but if want to change them one can use the following example:
+
+```python 
+from huggingface_hub import hf_hub_download
+from kandinsky3 import get_T2I_unet, get_T5encoder, get_movq, Kandinsky3T2IPipeline
+
+unet_path = hf_hub_download(
+        repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt')
+)
+
+movq_path = hf_hub_download(
+          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt')
+)
+unet, null_embedding, projections_state_dict = get_T2I_unet(device, unet_path, fp16=fp16)
+processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
+movq = get_movq(device, movq_path, fp16=fp16)
+t2i_pipe =  Kandinsky3T2IPipeline(device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16)
+```
+
+```python 
+from huggingface_hub import hf_hub_download
+from kandinsky3 import get_inpainting_unet, get_T5encoder, get_movq, Kandinsky3InpaintingPipeline
+
+inpainting_unet_path = hf_hub_download(
+          repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
+)
+movq_path = hf_hub_download(
+          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt')
+)
+
+unet, null_embedding, projections_state_dict = get_inpainting_unet(device, unet_path, fp16=fp16)
+processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
+movq = get_movq(device, movq_path, fp16=False) #MoVQ ooesn't work properly in fp16 on inpainting
+pipe = Kandinsky3InpaintingPipeline(device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16)
+```
 
 ## Installing
 
