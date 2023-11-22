@@ -2,24 +2,32 @@
 
 ![](assets/title.jpg)
 
-[Post] | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) |
+[Post] | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Report]
 
 ## Description:
 
 Kandinsky 3.0 is an open-source text-to-image diffusion model built upon the Kandinsky2-x model family. In comparison to its predecessors, Kandinsky 3.0 incorporates more data and specifically related to Russian culture, which allows to generate pictures related to Russin culture. Furthermore, enhancements have been made to the text understanding and visual quality of the model, achieved by increasing the size of the text encoder and Diffusion U-Net models, respectively.
 
+For more information: details of training, example of generations check out our [post](). The english version will be released in a couple of days.
+
 ## Architecture details:
+
 
 ![](assets/kandinsky.jpg)
 
-+ Text encoder Flan-UL2 - 8.6B
+
+Architecture consists of three parts:
+
++ Text encoder Flan-UL2 (encoder part) - 8.6B
 + Latent Diffusion U-Net - 3B
 + MoVQ encoder/decoder - 267M
 
 
-## Сheckpoints:
+## Models
 
-+ [Base](): Base text-to-image diffusion model 
+We release our two models:
+
++ [Base](): Base text-to-image diffusion model. This model wa
 + [Inpainting](): Inpainting version of the model
 
 ## Installing
