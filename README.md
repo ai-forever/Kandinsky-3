@@ -38,11 +38,11 @@ from huggingface_hub import hf_hub_download
 from kandinsky3 import get_T2I_unet, get_T5encoder, get_movq, Kandinsky3T2IPipeline
 
 unet_path = hf_hub_download(
-        repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt')
+        repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt'
 )
 
 movq_path = hf_hub_download(
-          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt')
+          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt'
 )
 unet, null_embedding, projections_state_dict = get_T2I_unet(device, unet_path, fp16=fp16)
 processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
@@ -58,7 +58,7 @@ inpainting_unet_path = hf_hub_download(
           repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
 )
 movq_path = hf_hub_download(
-          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt')
+          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt'
 )
 
 unet, null_embedding, projections_state_dict = get_inpainting_unet(device, unet_path, fp16=fp16)
