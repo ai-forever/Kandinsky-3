@@ -57,6 +57,18 @@ pfps = 'medium' # ['low', 'medium', 'high']
 image = t2i_pipe( "A cute corgi lives in a house made out of sushi.")
 ```
 
+### 2. inpainting
+
+```python
+from kandinsky3 import get_inpainting_pipeline
+
+inp_pipe = get_T2I_pipeline('cuda', fp16=True)
+
+image = ... # PIL Image
+mask = ... # Numpy array (HxW). Set 1 where image should be masked
+image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mask)
+```
+
 ## Examples of generations
 
 <hr>
