@@ -25,3 +25,4 @@ bezier
 scipy
 Pillow
 tqdm
+huggingface_hub

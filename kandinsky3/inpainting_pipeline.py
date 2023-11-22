@@ -65,12 +65,18 @@ class Kandinsky3InpaintingPipeline:
             
         masked_latent = self.movq.encode(masked_latent)
         mask = torch.nn.functional.interpolate(mask, size=(masked_latent.shape[2], masked_latent.shape[3]))
-        context, context_mask = self.t5_encoder(condition_model_input)
         
-        if negative_condition_model_input is not None:
-            negative_context, negative_context_mask = self.t5_encoder(negative_condition_model_input)
-        else:
-            negative_context, negative_context_mask = None, None
+        with torch.cuda.amp.autocast(enabled=self.fp16):
+            context, context_mask = self.t5_encoder(condition_model_input)
+
+            if negative_condition_model_input is not None:
+                negative_context, negative_context_mask = self.t5_encoder(negative_condition_model_input)
+            else:
+                negative_context, negative_context_mask = None, None
+        
+        if self.fp16:
+            mask = mask.to(torch.float16)
+            masked_latent = masked_latent.to(torch.float16)
 
         return {
             'context': context, 
@@ -121,10 +127,11 @@ class Kandinsky3InpaintingPipeline:
         guidance_weight_text: float = 4,
     ) -> List[PIL.Image.Image]:
     
+
         with torch.no_grad():
             batch = self.prepare_batch(text, negative_text, image, mask)
             processed = self.shared_step(batch)
-            
+                
         betas = get_named_beta_schedule('cosine', 50)
         base_diffusion = BaseDiffusion(betas, percentile=0.95)
         
@@ -157,9 +164,9 @@ class Kandinsky3InpaintingPipeline:
                     )
 
                     images = torch.cat([self.movq.decode(image) for image in images.chunk(2)])
-            images = torch.clip((images + 1.) / 2., 0., 1.).cpu()
+                    images = torch.clip((images + 1.) / 2., 0., 1.).cpu()
 
-            for images_chunk in images.chunk(1):
-                pil_images += [self.to_pil(image) for image in images_chunk]
+                    for images_chunk in images.chunk(1):
+                        pil_images += [self.to_pil(image) for image in images_chunk]
 
         return pil_images

@@ -30,7 +30,8 @@ setup(
                     "bezier",
                     "scipy",
                     "Pillow",
-                    "tqdm"
+                    "tqdm",
+                    "huggingface_hub"
   
     ],
     author="",

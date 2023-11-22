@@ -194,7 +194,7 @@ def get_inpainting_pipeline(
 
     unet, null_embedding, projections_state_dict = get_inpainting_unet(device, unet_path, fp16=fp16)
     processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
-    movq = get_movq(device, movq_path, fp16=fp16)
+    movq = get_movq(device, movq_path, fp16=False) #MoVQ ooesn't work properly in fp16 on inpainting
     return Kandinsky3InpaintingPipeline(
         device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16
     )
