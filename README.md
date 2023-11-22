@@ -27,14 +27,20 @@ Architecture consists of three parts:
 
 We release our two models:
 
-+ [Base](): Base text-to-image diffusion model. This model wa
-+ [Inpainting](): Inpainting version of the model
++ [Base](): Base text-to-image diffusion model. This model was trained over 2M steps on 400 A100
++ [Inpainting](): Inpainting version of the model. The model was initialized from final checkpoint of base model and trained 250k steps on 300 A100.
 
 ## Installing
 
+To install repo first one need to create conda environment:
+
 ```
-pip install -r requirements.txt
+conda create -n kandinsky -y python=3.8;
+source activate kandinsky;
+pip install torch==1.10.1+cu111 torchvision==0.11.2+cu111 torchaudio==0.10.1 -f https://download.pytorch.org/whl/cu113/torch_stable.html;
+pip install -r requirements.txt;
 ```
+The exact dependencies is got using `pip freeze` and can be found in `exact_requirements.txt`
 
 ## How to use:
 

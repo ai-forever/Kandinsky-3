@@ -1,10 +1,5 @@
 timm
--f https://download.pytorch.org/whl/torch_stable.html
-torch==1.10.1+cu111
--f https://download.pytorch.org/whl/torch_stable.html
-torchvision==0.11.2+cu111
--f https://download.pytorch.org/whl/torch_stable.html
-torchaudio==0.10.1
+
 pytorch_lightning==1.7.5
 transformers
 accelerate
