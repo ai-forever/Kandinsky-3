@@ -37,6 +37,7 @@ Weights of the model are loaded internally but if want to change them one can us
 from huggingface_hub import hf_hub_download
 from kandinsky3 import get_T2I_unet, get_T5encoder, get_movq, Kandinsky3T2IPipeline
 
+
 unet_path = hf_hub_download(
         repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt'
 )
@@ -44,6 +45,10 @@ unet_path = hf_hub_download(
 movq_path = hf_hub_download(
           repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt'
 )
+
+fp16 = True
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
 unet, null_embedding, projections_state_dict = get_T2I_unet(device, unet_path, fp16=fp16)
 processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
 movq = get_movq(device, movq_path, fp16=fp16)
