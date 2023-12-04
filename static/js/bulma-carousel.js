@@ -90,8 +90,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* unused harmony export position */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return css; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__type__ = __webpack_require__(2);
-
-
 var addClasses = function addClasses(element, classes) {
 	classes = Array.isArray(classes) ? classes : classes.split(' ');
 	classes.forEach(function (cls) {

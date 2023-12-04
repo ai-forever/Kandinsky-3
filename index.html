@@ -56,6 +56,18 @@
               <span class="author-block">
                 <a href="https://ai-forever.github.io/kandinsky-video/">Viacheslav Vasilev</a><sup>1,2</sup>,
               </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/kandinsky-video/">Anastasia Maltseva</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/kandinsky-video/">Sofia Kirillova</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/kandinsky-video/">Igor Pavlov</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/kandinsky-video/">Julia Agafonova</a><sup>1,2</sup>,
+              </span>
               <br>
               <span class="author-block">
                 <a href="https://ai-forever.github.io/kandinsky-video/">Andrey Kuznetsov</a><sup>1,3</sup>,
@@ -111,44 +123,69 @@
     <div class="container">
       <div id="results-carousel" class="carousel results-carousel">
         <div class="item item-steve">
-          <img src="./static/images/photo_1.jpg"
-            class="interpolation-image"
+            <img src="./static/images/photo_1.jpg"
+            class="img-thumbnail" 
             alt="Interpolate start reference image."/>
-        </div>
-        <div class="item item-chair-tp">
+            <div class="text-overlay">
+              <div class="text">Amazing playful nice cute strawberry character, dynamic poze, surreal fantazy garden background, gorgeous masterpice, award winning photo, soft natural lighting, 
+                3d, Blender, Octane render, tilt - shift, deep field, colorful.</div>
+            </div>
+          </div>
+        <div class="item">
           <img src="./static/images/photo_2.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">asphodel cenobite femme with multimedia rainbowcore organic shapes and elements of a primordial creature, minimalist, </div>
+          </div>
         </div>
         <div class="item item-shiba">
           <img src="./static/images/photo_3.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">A beautiful landscape outdoors scene in the crochet knitting art style, drawing in style by Alfons Mucha</div>
+          </div>
         </div>
         <div class="item item-fullbody">
           <img src="./static/images/photo_4.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">Car, mustang, movie, person, poster, car cover, person, in the style of alessandro gottardo, gold and cyan</div>
+          </div>
         </div>
         <div class="item item-blueshirt">
           <img src="./static/images/photo_5.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">cloud in blue sky, a red lip, collage art, shuji terayama, dreamy objects, surreal, criterion collection </div>
+          </div>
         </div>
         <div class="item item-mask">
           <img src="./static/images/photo_6.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">gorgeous phoenix, cosmic, darkness, epic, cinematic, moonlight, stars, high - definition, texture,Oscar-Claude Monet</div>
+          </div>
         </div>
         <div class="item item-coffee">
           <img src="./static/images/photo_7.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">a yellow house at the edge of the danish fjord, in the style of eiko ojala, ingrid baars, ad posters, </div>
+          </div>
         </div>
         <div class="item item-toby">
           <img src="./static/images/photo_8.jpg"
-            class="interpolation-image"
-            alt="Interpolate start reference image."/>
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">dragon fruit head, upper body, realistic, illustration by Joshua Hoffine Norman Rockwell, scary</div>
+          </div>
         </div>
       </div>
     </div>
@@ -183,7 +220,8 @@ By results of our side by side comparisons Kandinsky become better in text under
           <img src="./static/images/kandinsky.jpg"
             class="interpolation-image"
             alt="Interpolate start reference image."/>
-          <p>
+            <p class="bottom-three"></p>
+          <p class="'margined">
             Kandinsky 3.0 is a latent diffusion model, the full pipeline of which includes a text encoder for processing a prompt from the user, 
             a U-Net for predicting noise during denoising (reverse) process and a decoder for image reconstruction from the generated latent. 
             During the U-Net training, the text encoder and image decoder were completely frozen. The whole model contains 11.9 billion parameters. 
@@ -198,19 +236,51 @@ By results of our side by side comparisons Kandinsky become better in text under
       <div class="column is-full-width">
         <h2 class="title is-3">Inpainting</h2>
         <div class="content has-text-justified">
+          <p class="'margined">
           With our text-to-image model we additionally release an inpainting mode. Starting training from the base model, then we  
           fine-tune it on a diverse dataset containing random masks. The model showcases its ability to intelligently fill in missing areas of images based on text query and
           seamlessly blending them with the surrounding visual content. 
-          
+        </p>
           <div class="image-container">
-            <img src="static/images/inpainting/robot.png" alt="Image 1">
+            <img src="static/images/inpainting/robot.png" alt="">
             <img src="static/images/inpainting/robot_mask.png" alt="Image 2">
           </div>
           <div class="image-container">
-            <img src="static/images/inpainting/rocket.png" alt="Image 1">
-            <img src="static/images/inpainting/rocket_mask.png" alt="Image 2">
+            <img src="static/images/inpainting/river.png" alt="Image 1">
+            <img src="static/images/inpainting/river_mask.png" alt="Image 2">
           </div>
 
+        </div>
+      </div>    
+    </div>
+
+
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Outpainting</h2>
+        <div class="content has-text-justified">
+          <p class="'margined">
+          With our text-to-image model we additionally release an inpainting mode. Starting training from the base model, then we  
+          fine-tune it on a diverse dataset containing random masks. The model showcases its ability to intelligently fill in missing areas of images based on text query and
+          seamlessly blending them with the surrounding visual content. 
+        </p>
+      
+        <div class="image-container">
+            <div class="image-box">
+                <img src="static/images/inpainting/beach.png" alt="Image 1"/>
+            </div>
+            <img src="static/images/inpainting/beach_mask.png" alt="Image 2"/>
+        </div>
+          
+          <p class="bottom-three"></p>
+        
+          <div class="image-container">
+            <div class="image-box">
+              <img src="static/images/inpainting/mushroom.png" alt="Image 1"/>
+            </div>
+            <img src="static/images/inpainting/mushroom_mask.png" alt="Image 2"/>
+          </div>
         </div>
       </div>    
     </div>

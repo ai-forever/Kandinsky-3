@@ -13,6 +13,60 @@ body {
     margin-bottom: 5px;
 }
 
+.margined {
+    margin-top: 1000px; /* Adding space before the text */
+    margin-bottom: 20px; /* Adding space after the text */
+}
+
+.bottom-three {
+  margin-bottom: 5cm;
+}
+
+.box-container {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box-container img {
+  width: 200%;
+  height: auto;
+  margin: 5px
+  display: flex;
+}
+
+.image-box {
+  border: 1px dashed #000; /* Add border to the box */
+  padding: 5px; /* Add internal padding to the box */
+  margin: 5px; /* Add margin around the box */
+  display: flex; /* Display the box as an inline-block element */
+  align-items: center;
+  justify-content: center;
+  background-color: #bbb;
+}
+
+img.img-thumbnail {
+  border: 1px solid #e4c9c9;
+  width: 100%;
+  height: auto;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+}
+
+
+/* .img-thumbnail:hover+.text-overlay {
+  opacity: 1;
+} */
+
+.text {
+  color: black;
+  font-size: 20px;
+  text-align: center;
+}
+
 .dnerf {
   font-variant: small-caps;
 }
@@ -23,7 +77,7 @@ body {
 .image-container img {
   width: 50%;
   height: auto;
-  margin: 5px
+  margin: 5px;
 }
 
 .teaser .hero-body {
@@ -119,22 +173,51 @@ body {
 }
 
 .results-carousel {
+
   overflow: hidden;
+  position: relative;
+  text-align: center;
 }
 
 .results-carousel .item {
+  position: relative;
   margin: 5px;
-  overflow: hidden;
   border: 1px solid #bbb;
   border-radius: 10px;
   padding: 0;
   font-size: 0;
+  color: white;
+  overflow: hidden;
 }
 
-.results-carousel video {
-  margin: 0;
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  opacity: 0;
+  color: black;
+  font-size: 24px;
 }
 
+
+.results-carousel .item:hover img.img-thumbnail {
+  opacity: 0.1;
+  pointer-events: none; /* This will prevent the image from being interactive when hovered */
+}
+
+.results-carousel .item:hover .text-overlay {
+  opacity: 1;
+}
+
+
+
+
+.image-cont {
+  position: relative;
+  display: inline-block;
+}
 
 .interpolation-panel {
   background: #f5f5f5;
@@ -145,6 +228,9 @@ body {
   width: 70%;
   border-radius: 5px;
 }
+
+
+
 
 .interpolation-video-column {
 }
@@ -161,5 +247,6 @@ body {
   width: 100%;
 }
 #interpolation-image-wrapper img {
-  border-radius: 5px;
+  border-radius: 0px;
+  display: block;
 }
