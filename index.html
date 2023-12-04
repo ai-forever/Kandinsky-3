@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Text-to-video generation model that demonstrates high-quality dynamics, appearance, and text alignment.">
+  <meta name="keywords" content="Text-to-Video, Kandinsky Video">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kandinsky Video</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/video-camera.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Kandinsky 3.0 </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Vladimir Arkhipkin</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Andrei Filatov</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Anastasia Maltseva</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Viacheslav Vasilev</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Said Azizov</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Igor Pavlov</a><sup>3</sup>,
+            </span>    
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Julia Agafonova</a><sup>3</sup>,
+            </span>    
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Andrey Kuznetsov</a><sup>1,3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ai-forever.github.io/kandinsky-video/">Denis Dimitrov</a><sup>1,3</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Sber AI&nbsp;&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>2</sup>MIPT&nbsp;&nbsp;&nbsp;</span>
+            <span class="author-block"><sup>3</sup>AIRI</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2311.13073.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2311.13073"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/ai-forever/KandinskyVideo"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="columns is-centered has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+      <!-- <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/meduza.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fireplace.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/explosion.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/road.mp4"
+                    type="video/mp4">
+          </video>
+        </div>  
+      </div>
+    </div> -->
+    <section class="hero is-small">
+      <div class="hero-body">
+          <div class="container">
+              <div id="results-carousel" class="carousel results-carousel">
+
+              <div id="slidere7af3f33-062d-4554-b11b-d8c7ca30afdb" class="slider" tabindex="0">
+  <div class="slider-container" style="opacity: 1; width: 9240px; transition: none 0s ease 0s; transform: translate3d(-1320px, 0px, 0px);"><div class="slider-item" data-slider-index="-3" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/photo_1.jpg" alt="carousel1">
+                      </div>
+                      <div class="card-content has-text-centered">Nature vs human nature, surreal, UHD, 8k, hyper
+                          details, rich colors, photograph.</div>
+                  </div></div><div class="slider-item" data-slider-index="-2" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/photo_2.jpg" alt="carousel7">
+                      </div>
+                      <div class="card-content has-text-centered">artistic</div>
+                  </div></div><div class="slider-item" data-slider-index="-1" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/photo_3.jpg" alt="carousel8">
+                      </div>
+                      <div class="card-content has-text-centered">Bright scene, aerial view,ancient city, fantasy,
+                          gorgeous light, mirror reflection, high detail, wide angle lens.</div>
+                  </div></div><div class="slider-item is-slide-next" data-slider-index="0" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/photo_4.jpg" alt="carousel1">
+                      </div>
+                      <div class="card-content has-text-centered">A small cactus with a happy face in the Sahara
+                          desert.</div>
+                  </div></div><div class="slider-item" data-slider-index="1" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/photo_5.jpg" alt="carousel2">
+                      </div>
+                      <div class="card-content has-text-centered">A alpaca made of colorful building blocks,
+                          cyberpunk.</div>
+                  </div></div><div class="slider-item" data-slider-index="2" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/photo_6.jpg" alt="carousel3">
+                      </div>
+                      <div class="card-content has-text-centered">Real beautiful woman.</div>
+                  </div></div><div class="slider-item" data-slider-index="3" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel4.png" alt="carousel4">
+                      </div>
+                      <div class="card-content has-text-centered">Luffy from ONEPIECE, handsome face, fantasy.</div>
+                  </div></div><div class="slider-item" data-slider-index="4" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel5.png" alt="carousel5">
+                      </div>
+                      <div class="card-content has-text-centered">Poster of a mechanical cat, techical Schematics
+                          viewed from front.</div>
+                  </div></div><div class="slider-item" data-slider-index="5" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel6.png" alt="carousel6">
+                      </div>
+                      <div class="card-content has-text-centered">Nature vs human nature, surreal, UHD, 8k, hyper
+                          details, rich colors, photograph.</div>
+                  </div></div><div class="slider-item is-slide-previous" data-slider-index="6" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel7.png" alt="carousel7">
+                      </div>
+                      <div class="card-content has-text-centered">artistic</div>
+                  </div></div><div class="slider-item is-current" data-slider-index="7" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel8.png" alt="carousel8">
+                      </div>
+                      <div class="card-content has-text-centered">Bright scene, aerial view,ancient city, fantasy,
+                          gorgeous light, mirror reflection, high detail, wide angle lens.</div>
+                  </div></div><div class="slider-item" data-slider-index="8" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel1.png" alt="carousel1">
+                      </div>
+                      <div class="card-content has-text-centered">A small cactus with a happy face in the Sahara
+                          desert.</div>
+                  </div></div><div class="slider-item" data-slider-index="9" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel2.png" alt="carousel2">
+                      </div>
+                      <div class="card-content has-text-centered">A alpaca made of colorful building blocks,
+                          cyberpunk.</div>
+                  </div></div><div class="slider-item" data-slider-index="10" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel3.png" alt="carousel3">
+                      </div>
+                      <div class="card-content has-text-centered">Real beautiful woman.</div>
+                  </div></div><div class="slider-item" data-slider-index="11" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel4.png" alt="carousel4">
+                      </div>
+                      <div class="card-content has-text-centered">Luffy from ONEPIECE, handsome face, fantasy.</div>
+                  </div></div><div class="slider-item" data-slider-index="12" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel5.png" alt="carousel5">
+                      </div>
+                      <div class="card-content has-text-centered">Poster of a mechanical cat, techical Schematics
+                          viewed from front.</div>
+                  </div></div><div class="slider-item" data-slider-index="13" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel6.png" alt="carousel6">
+                      </div>
+                      <div class="card-content has-text-centered">Nature vs human nature, surreal, UHD, 8k, hyper
+                          details, rich colors, photograph.</div>
+                  </div></div><div class="slider-item" data-slider-index="14" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel7.png" alt="carousel7">
+                      </div>
+                      <div class="card-content has-text-centered">artistic</div>
+                  </div></div><div class="slider-item" data-slider-index="15" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel8.png" alt="carousel8">
+                      </div>
+                      <div class="card-content has-text-centered">Bright scene, aerial view,ancient city, fantasy,
+                          gorgeous light, mirror reflection, high detail, wide angle lens.</div>
+                  </div></div><div class="slider-item" data-slider-index="16" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel1.png" alt="carousel1">
+                      </div>
+                      <div class="card-content has-text-centered">A small cactus with a happy face in the Sahara
+                          desert.</div>
+                  </div></div><div class="slider-item" data-slider-index="17" data-cloned="true" style="width: 440px;"><div class="card">
+                      <div class="card-image">
+                          <img src="static/images/carousel/carousel2.png" alt="carousel2">
+                      </div>
+                      <div class="card-content has-text-centered">A alpaca made of colorful building blocks,
+                          cyberpunk.</div>
+                  </div></div></div>
+<div class="slider-navigation-previous"><svg viewBox="0 0 50 80" xml:space="preserve">
+    <polyline fill="currentColor" stroke-width=".5em" stroke-linecap="round" stroke-linejoin="round" points="45.63,75.8 0.375,38.087 45.63,0.375 "></polyline>
+  </svg></div>
+<div class="slider-navigation-next"><svg viewBox="0 0 50 80" xml:space="preserve">
+    <polyline fill="currentColor" stroke-width=".5em" stroke-linecap="round" stroke-linejoin="round" points="0.375,0.375 45.63,38.087 0.375,75.8 "></polyline>
+  </svg></div><div class="slider-pagination"></div></div></div>
+          </div>
+      </div>
+  </section>	    
+
+
+        </div>
+      </div>
+  </div>
+</section>
+
+<!-- FusionFrames is a text-to-video generation model consisting of two main stages - keyframe generation and interpolation.  -->
+<!-- Our approach for temporal conditioning allows us to generate videos with high-quality appearance, smoothness and dynamics. -->
+<!--  -->
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+             We present Kandinsky 3.0, a large-scale text-to-image generation model based on latent diffusion, continuing the series of text-to-image Kandinsky models and reflecting our progress to achieve higher quality and realism of image generation. Compared to previous versions of Kandinsky 2.x, Kandinsky 3.0 leverages a two times larger UNet backbone, a ten times larger text encoder and remove diffusion mapping.
+We describe the architecture of the model, the data collection procedure, the training technique, the production system of user interaction. We focus on the key components that, as we have identified as a result of a large number of experiments, had the most significant impact on improving the quality of our model in comparison with the other ones.
+By results of our side by side comparisons Kandinsky become better in text understanding and works better on specific domains.
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+</section>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Overall Pipeline</h2>
+        <div class="content has-text-justified">
+          <img src="./static/images/kandinsky.jpg"
+            class="interpolation-image"
+            alt="Interpolate start reference image."/>
+          <p>
+            Kandinsky 3.0 is a latent diffusion model, the full pipeline of which includes a text encoder for processing a prompt from the user, 
+            a U-Net for predicting noise during denoising (reverse) process and a decoder for image reconstruction from the generated latent. 
+            During the U-Net training, the text encoder and image decoder were completely frozen. The whole model contains 11.9 billion parameters. 
+            For extended description of architecture please refer to technical report.
+          </p>
+        </div>
+      </div>    
+    </div>
+    <!--/ Matting. -->
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Inpainting</h2>
+        <div class="content has-text-justified">
+        
+        <img src="./static/images/panda_generations.jpg"
+            class="interpolation-image"
+            alt="Interpolate start reference image."/>
+          
+        <p>
+        </p>
+        
+        </div>
+      </div>    
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <div class="content has-text-justified">  
+            <h2 class="title is-3">Deforum</h2>
+            <table class="center">
+              <tbody><tr><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td><img src="./static/videos/A car moving on the road from the sea to the mountains.gif" raw="true"></td>
+                <td><img src="./static/videos/A red car drifting, 4k video.gif"></td>
+                <td><img src="./static/videos/chemistry laboratory, chemical explosion, 4k.gif"></td>              
+                <td><img src="./static/videos/Erupting volcano_ raw power, molten lava, and the forces of the Earth.gif"></td>
+              </tr>
+              <tr>
+                <td width="25%" style="text-align:center;">"A car moving on the road from the sea to the mountains"</td>
+                <td width="25%" style="text-align:center;">"A red car drifting, 4k video"</td>
+                <td width="25%" style="text-align:center;">"Chemistry laboratory, chemical explosion, 4k"</td>
+                <td width="25%" style="text-align:center;">"Erupting volcano raw power, molten lava, and the forces of the Earth"</td>
+              </tr>
+              <tr><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td><img src="./static/videos/luminescent jellyfish swims underwater, neon, 4k.gif" raw="true"></td>
+                <td><img src="./static/videos/Majestic waterfalls in a lush rainforest_ power, mist, and biodiversity.gif"></td>
+                <td><img src="./static/videos/white ghost flies through a night clearing, 4k.gif"></td>              
+                <td><img src="./static/videos/Wildlife migration_ herds on the move, crossing landscapes in harmony.gif"></td>
+              </tr>
+              <tr>
+                <td width="25%" style="text-align:center;">"Luminescent jellyfish swims underwater, neon, 4k"</td>
+                <td width="25%" style="text-align:center;">"Majestic waterfalls in a lush rainforest power, mist, and biodiversity"</td>
+                <td width="25%" style="text-align:center;">"White ghost flies through a night clearing, 4k"</td>
+                <td width="25%" style="text-align:center;">"Wildlife migration herds on the move, crossing landscapes in harmony"</td>
+              </tr>
+              <tr><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td><img src="./static/videos/Majestic humpback whale breaching_ power, grace, and ocean spectacle.gif" raw="true"></td>
+                <td><img src="./static/videos/Evoke the sense of wonder in a time-lapse journey through changing seasons.gif"></td>
+                <td><img src="./static/videos/Explore the fascinating world of underwater creatures in a visually stunning sequence.gif"></td>              
+                <td><img src="./static/videos/Polar ice caps_ the pristine wilderness of the Arctic and Antarctic.gif"></td>
+              </tr>
+              <tr>
+                <td width="25%" style="text-align:center;">"Majestic humpback whale breaching power, grace, and ocean spectacle"</td>
+                <td width="25%" style="text-align:center;">"Evoke the sense of wonder in a time-lapse journey through changing seasons"</td>
+                <td width="25%" style="text-align:center;">"Explore the fascinating world of underwater creatures in a visually stunning sequence"</td>
+                <td width="25%" style="text-align:center;">"Polar ice caps the pristine wilderness of the Arctic and Antarctic"</td>
+              </tr>
+              <tr><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td><img src="./static/videos/Rolling waves on a sandy beach_ relaxation, rhythm, and coastal beauty.gif" raw="true"></td>
+                <td><img src="./static/videos/Sloth in slow motion_ deliberate movements, relaxation, and arboreal life.gif"></td>
+                <td><img src="./static/videos/Sunrise over a tranquil mountain landscape_ colors, serenity, and awakening.gif"></td>              
+                <td><img src="./static/videos/Craft a heartwarming narrative showcasing the bond between a human and their loyal pet companion.gif"></td>
+              </tr>
+              <tr>
+                <td width="25%" style="text-align:center;">"Rolling waves on a sandy beach relaxation, rhythm, and coastal beauty"</td>
+                <td width="25%" style="text-align:center;">"Sloth in slow motion deliberate movements, relaxation, and arboreal life"</td>
+                <td width="25%" style="text-align:center;">"Sunrise over a tranquil mountain landscape colors, serenity, and awakening"</td>
+                <td width="25%" style="text-align:center;">"Craft a heartwarming narrative showcasing the bond between a human and their loyal pet companion"</td>
+              </tr>
+            </tbody></table>
+        </div>    
+      </div>
+    </div>
+  </div>
+
+<hr>
+<section class="section" id="Acknowledgment">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Acknowledgment</h2>
+
+    The authors express great gratitude to Igor Pavlov, Anastasia Lysenko and Sergey Markov for their contribution in collecting and processing video data,
+     thanks to which this study became possible and Andrei Filatov for building the site.
+
+
+  </div></section>
+
+</section>
+<hr>
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{arkhipkin2023fusionframes,
+  title     = {FusionFrames: Efficient Architectural Aspects for Text-to-Video Generation Pipeline},
+  author    = {Arkhipkin, Vladimir and Shaheen, Zein and Vasilev, Viacheslav and Dakhova, Elizaveta and Kuznetsov, Andrey and Dimitrov, Denis},
+  journal   = {arXiv preprint arXiv:2311.13073},
+  year      = {2023}, 
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
