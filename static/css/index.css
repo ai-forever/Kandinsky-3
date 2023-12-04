@@ -3,6 +3,7 @@ body {
 }
 
 
+
 .footer .icon-link {
     font-size: 25px;
     color: #000;
@@ -26,26 +27,20 @@ body {
   width: 200px;
   height: 200px;
   border: 1px solid black;
-  margin: 20px;
+  margin: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-.box-container img {
-  width: 200%;
-  height: auto;
-  margin: 5px
-  display: flex;
+  justify-content: space-around
 }
 
 .image-box {
   border: 1px dashed #000; /* Add border to the box */
-  padding: 5px; /* Add internal padding to the box */
-  margin: 5px; /* Add margin around the box */
-  display: flex; /* Display the box as an inline-block element */
-  align-items: center;
-  justify-content: center;
   background-color: #bbb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px;
+  padding: 5px;
 }
 
 img.img-thumbnail {
@@ -67,6 +62,10 @@ img.img-thumbnail {
   text-align: center;
 }
 
+.padded-element {
+  padding: 5px; /* You can adjust the value as needed */
+}
+
 .dnerf {
   font-variant: small-caps;
 }
@@ -77,7 +76,8 @@ img.img-thumbnail {
 .image-container img {
   width: 50%;
   height: auto;
-  margin: 5px;
+  margin: 0px;
+  padding: 5px;
 }
 
 .teaser .hero-body {
