@@ -17,6 +17,14 @@ body {
   font-variant: small-caps;
 }
 
+.image-container {
+  display: flex;
+}
+.image-container img {
+  width: 50%;
+  height: auto;
+  margin: 5px
+}
 
 .teaser .hero-body {
   padding-top: 0;
