@@ -1,1 +1,1 @@
-# kandinsky-video.github.io
+# Kandinsky-3.github.io
