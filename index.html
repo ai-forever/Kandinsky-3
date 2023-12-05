@@ -233,9 +233,18 @@ By results of our side by side comparisons Kandinsky become better in text under
       <div class="column is-full-width">
         <h2 class="title is-3">Overall Pipeline</h2>
         <div class="content has-text-justified">
+          <figure>
+          <img src="./static/images/K3_full_pipline.JPG"
+          class="interpolation-image"
+          alt="Interpolate start reference image."/> 
+          <figcaption></figcaption>
+        </figure>
+        <!-- <figure>
           <img src="./static/images/kandinsky.jpg"
             class="interpolation-image"
             alt="Interpolate start reference image."/>
+            <figcaption>"Our U-Net architecture"</figcaption>
+        </figure> -->
             <p class="bottom-three"></p>
           <p class="'margined">
             Kandinsky 3.0 is a latent diffusion model, the full pipeline of which includes a text encoder for processing a prompt from the user, 
@@ -298,59 +307,42 @@ By results of our side by side comparisons Kandinsky become better in text under
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Deforum</h2>
-        <div class="content has-text-justified">  
+        <div class="content has-text-justified"> 
+          Kandinsky-3 has an integration with <a href="https://ai-forever.github.io/deforumkandinsky.github.io/"> Deforum</a> which allows to generate high-quality animated video in different modes. 
             <table class="center">
-              <tbody><tr><td></td><td></td><td></td><td></td></tr>
+              <tbody><tr><td></td><td></td></tr>
               <tr>
-                <td><img src="./static/videos/A car moving on the road from the sea to the mountains.gif" raw="true"></td>
-                <td><img src="./static/videos/A red car drifting, 4k video.gif"></td>
-                <td><img src="./static/videos/chemistry laboratory, chemical explosion, 4k.gif"></td>              
-                <td><img src="./static/videos/Erupting volcano_ raw power, molten lava, and the forces of the Earth.gif"></td>
+                <td>          
+                  <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/zoomin.mp4"
+                          type="video/mp4"></td>
+                <td>
+                  <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+                    <source src="./static/videos/zoomout.mp4"
+                            type="video/mp4"></td>
+                </td>
+
               </tr>
               <tr>
-                <td width="25%" style="text-align:center;">"A car moving on the road from the sea to the mountains"</td>
-                <td width="25%" style="text-align:center;">"A red car drifting, 4k video"</td>
-                <td width="25%" style="text-align:center;">"Chemistry laboratory, chemical explosion, 4k"</td>
-                <td width="25%" style="text-align:center;">"Erupting volcano raw power, molten lava, and the forces of the Earth"</td>
+                <td width="50%" style="text-align:left;"><b>Mode:</b> "Zoomin" <br></br> <b>Prompt:</b>  "abyss in the phone, bright image, artstation"</td>
+                <td width="50%" style="text-align:left;"><b>Mode:</b> "Zoomout" <br></br> <b>Prompt:</b> : "big eye on the wall, a crown on it, patterns"</td>
               </tr>
-              <tr><td></td><td></td><td></td><td></td></tr>
+              <tr><td></td><td></td></tr>
               <tr>
-                <td><img src="./static/videos/luminescent jellyfish swims underwater, neon, 4k.gif" raw="true"></td>
-                <td><img src="./static/videos/Majestic waterfalls in a lush rainforest_ power, mist, and biodiversity.gif"></td>
-                <td><img src="./static/videos/white ghost flies through a night clearing, 4k.gif"></td>              
-                <td><img src="./static/videos/Wildlife migration_ herds on the move, crossing landscapes in harmony.gif"></td>
-              </tr>
-              <tr>
-                <td width="25%" style="text-align:center;">"Luminescent jellyfish swims underwater, neon, 4k"</td>
-                <td width="25%" style="text-align:center;">"Majestic waterfalls in a lush rainforest power, mist, and biodiversity"</td>
-                <td width="25%" style="text-align:center;">"White ghost flies through a night clearing, 4k"</td>
-                <td width="25%" style="text-align:center;">"Wildlife migration herds on the move, crossing landscapes in harmony"</td>
-              </tr>
-              <tr><td></td><td></td><td></td><td></td></tr>
-              <tr>
-                <td><img src="./static/videos/Majestic humpback whale breaching_ power, grace, and ocean spectacle.gif" raw="true"></td>
-                <td><img src="./static/videos/Evoke the sense of wonder in a time-lapse journey through changing seasons.gif"></td>
-                <td><img src="./static/videos/Explore the fascinating world of underwater creatures in a visually stunning sequence.gif"></td>              
-                <td><img src="./static/videos/Polar ice caps_ the pristine wilderness of the Arctic and Antarctic.gif"></td>
+                <td>
+                  <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+                    <source src="./static/videos/live_2.mp4"
+                            type="video/mp4"></td>
+                </td>
+                <td>
+                  <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+                    <source src="./static/videos/sinus.mp4"
+                            type="video/mp4"></td>
+                </td>
               </tr>
               <tr>
-                <td width="25%" style="text-align:center;">"Majestic humpback whale breaching power, grace, and ocean spectacle"</td>
-                <td width="25%" style="text-align:center;">"Evoke the sense of wonder in a time-lapse journey through changing seasons"</td>
-                <td width="25%" style="text-align:center;">"Explore the fascinating world of underwater creatures in a visually stunning sequence"</td>
-                <td width="25%" style="text-align:center;">"Polar ice caps the pristine wilderness of the Arctic and Antarctic"</td>
-              </tr>
-              <tr><td></td><td></td><td></td><td></td></tr>
-              <tr>
-                <td><img src="./static/videos/Rolling waves on a sandy beach_ relaxation, rhythm, and coastal beauty.gif" raw="true"></td>
-                <td><img src="./static/videos/Sloth in slow motion_ deliberate movements, relaxation, and arboreal life.gif"></td>
-                <td><img src="./static/videos/Sunrise over a tranquil mountain landscape_ colors, serenity, and awakening.gif"></td>              
-                <td><img src="./static/videos/Craft a heartwarming narrative showcasing the bond between a human and their loyal pet companion.gif"></td>
-              </tr>
-              <tr>
-                <td width="25%" style="text-align:center;">"Rolling waves on a sandy beach relaxation, rhythm, and coastal beauty"</td>
-                <td width="25%" style="text-align:center;">"Sloth in slow motion deliberate movements, relaxation, and arboreal life"</td>
-                <td width="25%" style="text-align:center;">"Sunrise over a tranquil mountain landscape colors, serenity, and awakening"</td>
-                <td width="25%" style="text-align:center;">"Craft a heartwarming narrative showcasing the bond between a human and their loyal pet companion"</td>
+                <td width="50%" style="text-align:left;"><b>Mode:</b> "Live" <br></br> <b>Prompt:</b> "Christmas tree, next to it on a stump a live snowball with a cartoon face a winterlandscape in the evening"</td>
+                <td width="50%" style="text-align:left;"><b>Mode:</b> "Sinus" <br></br> <b>Prompt:</b>  "chinese dragon under clouds, anime"</td>
               </tr>
             </tbody></table>
         </div>    
