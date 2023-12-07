@@ -113,6 +113,7 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 + Andrey Kuznetsov: [Github](https://github.com/kuznetsoffandrey), [Blog](https://t.me/complete_ai)
 + Denis Dimitrov: [Github](https://github.com/denndimitrov), [Blog](https://t.me/dendi_math_ai)
 
+## Citation
 ```
 @misc{arkhipkin2023kandinsky,
       title={Kandinsky 3.0 Technical Report}, 
