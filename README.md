@@ -2,13 +2,13 @@
 
 ![](assets/title.jpg)
 
-[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3/) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Report]
+[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
 
 ## Description:
 
 Kandinsky 3.0 is an open-source text-to-image diffusion model built upon the Kandinsky2-x model family. In comparison to its predecessors, Kandinsky 3.0 incorporates more data and specifically related to Russian culture, which allows to generate pictures related to Russin culture. Furthermore, enhancements have been made to the text understanding and visual quality of the model, achieved by increasing the size of the text encoder and Diffusion U-Net models, respectively.
 
-For more information: details of training, example of generations check out our [post](https://habr.com/ru/companies/sberbank/articles/775590/). The english version will be released in a couple of days.
+For more information: details of training, example of generations check out our [post](). The english version will be released in a couple of days.
 
 ## Architecture details:
 
@@ -27,53 +27,8 @@ Architecture consists of three parts:
 
 We release our two models:
 
-+ Base: Base text-to-image diffusion model. This model was trained over 2M steps on 400 A100
-+ Inpainting: Inpainting version of the model. The model was initialized from final checkpoint of base model and trained 250k steps on 300 A100.
-
-
-Weights of the model are loaded internally but if want to change them one can use the following example:
-
-```python 
-from huggingface_hub import hf_hub_download
-from kandinsky3 import get_T2I_unet, get_T5encoder, get_movq, Kandinsky3T2IPipeline
-
-
-unet_path = hf_hub_download(
-        repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt'
-)
-
-movq_path = hf_hub_download(
-          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt'
-)
-
-fp16 = True
-device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
-unet, null_embedding, projections_state_dict = get_T2I_unet(device, unet_path, fp16=fp16)
-processor, condition_encoders = get_T5encoder(device, projections_state_dict=projections_state_dict, fp16=fp16)
-movq = get_movq(device, movq_path, fp16=fp16)
-t2i_pipe =  Kandinsky3T2IPipeline(device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16)
-```
-
-```python 
-from huggingface_hub import hf_hub_download
-from kandinsky3 import get_inpainting_unet, get_T5encoder, get_movq, Kandinsky3InpaintingPipeline
-
-inpainting_unet_path = hf_hub_download(
-          repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
-)
-movq_path = hf_hub_download(
-          repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt'
-)
-
-fp16 = True
-device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
-unet, null_embedding, projections_state_dict = get_inpainting_unet(device, unet_path, fp16=fp16)
-processor, condition_encoders = get_T5encoder(device, projections_state_dict=projections_state_dict, fp16=fp16)
-movq = get_movq(device, movq_path, fp16=False) #MoVQ ooesn't work properly in fp16 on inpainting
-pipe = Kandinsky3InpaintingPipeline(device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16)
-```
++ [Base](): Base text-to-image diffusion model. This model was trained over 2M steps on 400 A100
++ [Inpainting](): Inpainting version of the model. The model was initialized from final checkpoint of base model and trained 250k steps on 300 A100.
 
 ## Installing
 
@@ -106,7 +61,7 @@ image = t2i_pipe( "A cute corgi lives in a house made out of sushi.")
 ```python
 from kandinsky3 import get_inpainting_pipeline
 
-inp_pipe = get_inpainting_pipeline('cuda', fp16=True)
+inp_pipe = get_T2I_pipeline('cuda', fp16=True)
 
 image = ... # PIL Image
 mask = ... # Numpy array (HxW). Set 1 where image should be masked
@@ -157,3 +112,16 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 + Arseniy Shakhmatov: [Github](https://github.com/cene555), [Blog](https://t.me/gradientdip)
 + Andrey Kuznetsov: [Github](https://github.com/kuznetsoffandrey), [Blog](https://t.me/complete_ai)
 + Denis Dimitrov: [Github](https://github.com/denndimitrov), [Blog](https://t.me/dendi_math_ai)
+
+## Citation
+```
+@misc{arkhipkin2023kandinsky,
+      title={Kandinsky 3.0 Technical Report}, 
+      author={Vladimir Arkhipkin and Andrei Filatov and Viacheslav Vasilev and Anastasia Maltseva and Said Azizov and Igor Pavlov and Julia Agafonova and Andrey Kuznetsov and Denis Dimitrov},
+      year={2023},
+      eprint={2312.03511},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
