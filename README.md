@@ -112,3 +112,15 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 + Arseniy Shakhmatov: [Github](https://github.com/cene555), [Blog](https://t.me/gradientdip)
 + Andrey Kuznetsov: [Github](https://github.com/kuznetsoffandrey), [Blog](https://t.me/complete_ai)
 + Denis Dimitrov: [Github](https://github.com/denndimitrov), [Blog](https://t.me/dendi_math_ai)
+
+```
+@misc{arkhipkin2023kandinsky,
+      title={Kandinsky 3.0 Technical Report}, 
+      author={Vladimir Arkhipkin and Andrei Filatov and Viacheslav Vasilev and Anastasia Maltseva and Said Azizov and Igor Pavlov and Julia Agafonova and Andrey Kuznetsov and Denis Dimitrov},
+      year={2023},
+      eprint={2312.03511},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
