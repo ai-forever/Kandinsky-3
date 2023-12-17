@@ -2,7 +2,7 @@
 
 ![](assets/title.jpg)
 
-[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
+[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Medium Post](https://medium.com/@filatovandreiv/kandinsky-3-0-a-new-model-for-generating-images-from-text-abe13e3bd6ab) [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
 
 ## Description:
 
