@@ -132,7 +132,7 @@ class Kandinsky3InpaintingPipeline:
             batch = self.prepare_batch(text, negative_text, image, mask)
             processed = self.shared_step(batch)
                 
-        betas = get_named_beta_schedule('cosine', 50)
+        betas = get_named_beta_schedule('cosine', steps)
         base_diffusion = BaseDiffusion(betas, percentile=0.95)
         
         pil_images = []
