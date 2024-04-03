@@ -23,6 +23,12 @@ body {
   margin-bottom: 5cm;
 }
 
+.bottom {border-bottom: 2px solid black;}
+
+tr{
+  border-bottom: 2px solid #f5f5f5;
+}
+
 .box-container {
   width: 200px;
   height: 200px;
