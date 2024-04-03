@@ -1,14 +1,9 @@
-from typing import Optional, Union, List
-import PIL
 import os
-
-import numpy as np
-from tqdm import tqdm
-from huggingface_hub import hf_hub_download
+from typing import Optional, Union
 
 import torch
-import omegaconf
-from omegaconf import OmegaConf
+from huggingface_hub import hf_hub_download
+
 from kandinsky3.model.unet import UNet
 from kandinsky3.movq import MoVQ
 from kandinsky3.condition_encoders import T5TextConditionEncoder
@@ -20,9 +15,9 @@ from .inpainting_pipeline import Kandinsky3InpaintingPipeline
 
 
 def get_T2I_unet(
-    device: Union[str, torch.device],
-    weights_path: Optional[str] = None, 
-    fp16: bool = False
+        device: Union[str, torch.device],
+        weights_path: Optional[str] = None,
+        dtype: Union[str, torch.dtype] = torch.float32,
 ) -> (UNet, Optional[torch.Tensor], Optional[dict]):
     unet = UNet(
         model_channels=384,
@@ -40,51 +35,46 @@ def get_T2I_unet(
         add_self_attention=(False, True, True, True),
     )
 
-    # load weights
     null_embedding = None
-    projections_state_dict = None
     if weights_path:
         state_dict = torch.load(weights_path, map_location=torch.device('cpu'))
-        projections_state_dict = state_dict['projections']
         null_embedding = state_dict['null_embedding']
         unet.load_state_dict(state_dict['unet'])
-    
-    unet.eval().to(device)
 
-    if fp16:
-        unet = unet.half()
-
-    return unet, null_embedding, projections_state_dict
+    unet.to(device=device, dtype=dtype).eval()
+    return unet, null_embedding
 
 
 def get_T5encoder(
-    device: Union[str, torch.device],
-    weights_path: str, 
-    projections_state_dict: Optional[dict] = None,
-    fp16: bool = True,
-    low_cpu_mem_usage: bool = True,
-    device_map: Optional[str] = None
+        device: Union[str, torch.device],
+        weights_path: str,
+        projection_name: str,
+        dtype: Union[str, torch.dtype] = torch.float32,
+        low_cpu_mem_usage: bool = True,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
 ) -> (T5TextConditionProcessor, T5TextConditionEncoder):
-    model_names = {'t5': weights_path}
-    tokens_length = {'t5': 128}
+    tokens_length = 128
     context_dim = 4096
-    model_dims = {'t5': 4096}
-    processor = T5TextConditionProcessor(tokens_length, model_names)
-    condition_encoders = T5TextConditionEncoder(
-        model_names, context_dim, model_dims, low_cpu_mem_usage=low_cpu_mem_usage, device_map=device_map
+    processor = T5TextConditionProcessor(tokens_length, weights_path)
+    condition_encoder = T5TextConditionEncoder(
+        weights_path, context_dim, low_cpu_mem_usage=low_cpu_mem_usage, device=device,
+        dtype=dtype, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit
     )
-    
-    if projections_state_dict:
-        condition_encoders.projections.load_state_dict(projections_state_dict)
-        
-    condition_encoders = condition_encoders.eval().to(device)
-    return processor, condition_encoders
+
+    if weights_path:
+        projections_weights_path = os.path.join(weights_path, projection_name)
+        state_dict = torch.load(projections_weights_path, map_location=torch.device('cpu'))
+        condition_encoder.projection.load_state_dict(state_dict)
+
+    condition_encoder.projection.to(device=device, dtype=dtype).eval()
+    return processor, condition_encoder
 
 
 def get_movq(
-    device: Union[str, torch.device],
-    weights_path: str, 
-    fp16: bool = False
+        device: Union[str, torch.device],
+        weights_path: Optional[str] = None,
+        dtype: Union[str, torch.dtype] = torch.float32,
 ) -> MoVQ:
     generator_config = {
         'double_z': False,
@@ -99,20 +89,20 @@ def get_movq(
         'dropout': 0.0
     }
     movq = MoVQ(generator_config)
-    movq.load_state_dict(torch.load(weights_path))
-    movq = movq.eval().to(device)
 
-    if fp16:
-        movq = movq.half()
+    if weights_path:
+        state_dict = torch.load(weights_path, map_location=torch.device('cpu'))
+        movq.load_state_dict(state_dict)
+
+    movq.to(device=device, dtype=dtype).eval()
     return movq
 
 
 def get_inpainting_unet(
-    device: Union[str, torch.device],
-    weights_path: Optional[str] = None, 
-    fp16: bool = False
+        device: Union[str, torch.device],
+        weights_path: Optional[str] = None,
+        dtype: Union[str, torch.dtype] = torch.float32,
 ) -> (UNet, Optional[torch.Tensor], Optional[dict]):
-
     unet = UNet(
         model_channels=384,
         num_channels=9,
@@ -129,72 +119,140 @@ def get_inpainting_unet(
         add_self_attention=(False, True, True, True),
     )
 
-    # load weights
     null_embedding = None
-    projections_state_dict = None
     if weights_path:
         state_dict = torch.load(weights_path, map_location=torch.device('cpu'))
-        projections_state_dict = state_dict['projections']
         null_embedding = state_dict['null_embedding']
         unet.load_state_dict(state_dict['unet'])
-    
-    if fp16:
-        unet = unet.half()
-    
-    unet.eval().to(device)
 
-    return unet, null_embedding, projections_state_dict
+    unet.to(device=device, dtype=dtype).eval()
+    return unet, null_embedding
 
 
 def get_T2I_pipeline(
-    device: Union[str, torch.device],
-    fp16: bool = False,
-    cache_dir: str = '/tmp/kandinsky3/',
-    unet_path: str = None,
-    text_encode_path: str = None,
-    movq_path: str = None,
+        device_map: Union[str, torch.device, dict],
+        dtype_map: Union[str, torch.dtype, dict] = torch.float32,
+        low_cpu_mem_usage: bool = True,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
+        cache_dir: str = '/tmp/kandinsky3/',
+        unet_path: str = None,
+        text_encoder_path: str = None,
+        movq_path: str = None,
 ) -> Kandinsky3T2IPipeline:
+    assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
+    if not isinstance(device_map, dict):
+        device_map = {
+            'unet': device_map, 'text_encoder': device_map, 'movq': device_map
+        }
+    if not isinstance(dtype_map, dict):
+        dtype_map = {
+            'unet': dtype_map, 'text_encoder': dtype_map, 'movq': dtype_map
+        }
+
     if unet_path is None:
         unet_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt', cache_dir=cache_dir
         )
-    if text_encode_path is None:
-        text_encode_path = 'google/flan-ul2'
+    if text_encoder_path is None:
+        text_encoder_path = 'google/flan-ul2'
     if movq_path is None:
         movq_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt', cache_dir=cache_dir
         )
 
-    unet, null_embedding, projections_state_dict = get_T2I_unet(device, unet_path, fp16=fp16)
-    processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
-    movq = get_movq(device, movq_path, fp16=fp16)
+    unet, null_embedding = get_T2I_unet(device_map['unet'], unet_path, dtype=dtype_map['unet'])
+    processor, condition_encoder = get_T5encoder(
+        device_map['text_encoder'], text_encoder_path, 'projection.pt', dtype=dtype_map['text_encoder'],
+        low_cpu_mem_usage=low_cpu_mem_usage, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit
+    )
+    movq = get_movq(device_map['movq'], movq_path, dtype=dtype_map['movq'])
     return Kandinsky3T2IPipeline(
-        device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16
+        device_map, dtype_map, unet, null_embedding, processor, condition_encoder, movq, False
+    )
+
+
+def get_T2I_Flash_pipeline(
+        device_map: Union[str, torch.device, dict],
+        dtype_map: Union[str, torch.dtype, dict] = torch.float32,
+        low_cpu_mem_usage: bool = True,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
+        cache_dir: str = '/tmp/kandinsky3/',
+        unet_path: str = None,
+        text_encoder_path: str = None,
+        movq_path: str = None,
+) -> Kandinsky3T2IPipeline:
+    assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
+    if not isinstance(device_map, dict):
+        device_map = {
+            'unet': device_map, 'text_encoder': device_map, 'movq': device_map
+        }
+    if not isinstance(dtype_map, dict):
+        dtype_map = {
+            'unet': dtype_map, 'text_encoder': dtype_map, 'movq': dtype_map
+        }
+
+    if unet_path is None:
+        unet_path = hf_hub_download(
+            repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_flash.pt', cache_dir=cache_dir
+        )
+    if text_encoder_path is None:
+        text_encoder_path = 'google/flan-ul2'
+    if movq_path is None:
+        movq_path = hf_hub_download(
+            repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt', cache_dir=cache_dir
+        )
+
+    unet, null_embedding = get_T2I_unet(device_map['unet'], unet_path, dtype=dtype_map['unet'])
+    processor, condition_encoder = get_T5encoder(
+        device_map['text_encoder'], text_encoder_path, 'projection_flash.pt', dtype=dtype_map['text_encoder'],
+        low_cpu_mem_usage=low_cpu_mem_usage, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit
+    )
+    movq = get_movq(device_map['movq'], movq_path, dtype=dtype_map['movq'])
+    return Kandinsky3T2IPipeline(
+        device_map, dtype_map, unet, null_embedding, processor, condition_encoder, movq, True
     )
 
 
 def get_inpainting_pipeline(
-        device: Union[str, torch.device],
-        fp16: bool = False,
+        device_map: Union[str, torch.device, dict],
+        dtype_map: Union[str, torch.dtype, dict] = torch.float32,
+        low_cpu_mem_usage: bool = True,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
         cache_dir: str = '/tmp/kandinsky3/',
         unet_path: str = None,
-        text_encode_path: str = None,
+        text_encoder_path: str = None,
         movq_path: str = None,
 ) -> Kandinsky3InpaintingPipeline:
+    assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
+    if not isinstance(device_map, dict):
+        device_map = {
+            'unet': device_map, 'text_encoder': device_map, 'movq': device_map
+        }
+    if not isinstance(dtype_map, dict):
+        dtype_map = {
+            'unet': dtype_map, 'text_encoder': dtype_map, 'movq': dtype_map
+        }
+
     if unet_path is None:
         unet_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
         )
-    if text_encode_path is None:
-        text_encode_path = 'google/flan-ul2'
+    if text_encoder_path is None:
+        text_encoder_path = 'google/flan-ul2'
     if movq_path is None:
         movq_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt', cache_dir=cache_dir
         )
 
-    unet, null_embedding, projections_state_dict = get_inpainting_unet(device, unet_path, fp16=fp16)
-    processor, condition_encoders = get_T5encoder(device, text_encode_path, projections_state_dict, fp16=fp16)
-    movq = get_movq(device, movq_path, fp16=False) #MoVQ ooesn't work properly in fp16 on inpainting
+    unet, null_embedding = get_inpainting_unet(device_map['unet'], unet_path, dtype=dtype_map['unet'])
+    processor, condition_encoder = get_T5encoder(
+        device_map['text_encoder'], text_encoder_path, 'projection_inpainting.pt', dtype=dtype_map['text_encoder'],
+        low_cpu_mem_usage=low_cpu_mem_usage, load_in_8bit=load_in_8bit, load_in_4bit=load_in_4bit
+    )
+    movq = get_movq(device_map['movq'], movq_path, dtype=dtype_map['movq'])
     return Kandinsky3InpaintingPipeline(
-        device, unet, null_embedding, processor, condition_encoders, movq, fp16=fp16
+        device_map, dtype_map, unet, null_embedding, processor, condition_encoder, movq
     )
