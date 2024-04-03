@@ -1,8 +1,6 @@
 from omegaconf import OmegaConf
 import numpy as np
 from scipy import ndimage
-from scipy.interpolate import interp1d
-from matplotlib.path import Path
 import torch.nn as nn
 from skimage.transform import resize
 
