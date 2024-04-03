@@ -1,0 +1,252 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
+
+.footer .icon-link {
+    font-size: 25px;
+    color: #000;
+}
+
+.link-block a {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.margined {
+    margin-top: 1000px; /* Adding space before the text */
+    margin-bottom: 20px; /* Adding space after the text */
+}
+
+.bottom-three {
+  margin-bottom: 5cm;
+}
+
+.box-container {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around
+}
+
+.image-box {
+  border: 1px dashed #000; /* Add border to the box */
+  background-color: #bbb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px;
+  padding: 5px;
+}
+
+img.img-thumbnail {
+  border: 1px solid #e4c9c9;
+  width: 100%;
+  height: auto;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+}
+
+
+/* .img-thumbnail:hover+.text-overlay {
+  opacity: 1;
+} */
+
+.text {
+  color: black;
+  font-size: 20px;
+  text-align: center;
+}
+
+.padded-element {
+  padding: 5px; /* You can adjust the value as needed */
+}
+
+.dnerf {
+  font-variant: small-caps;
+}
+
+.image-container {
+  display: flex;
+}
+.image-container img {
+  width: 50%;
+  height: auto;
+  margin: 0px;
+  padding: 5px;
+}
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+
+.publication-title {
+}
+
+.publication-banner {
+  max-height: parent;
+
+}
+
+.publication-banner video {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  object-fit: fit;
+}
+
+.publication-header .hero-body {
+}
+
+.publication-title {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-venue {
+    color: #555;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.publication-awards {
+    color: #ff3860;
+    width: fit-content;
+    font-weight: bolder;
+}
+
+.publication-authors {
+}
+
+.publication-authors a {
+   color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+    text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.publication-banner img {
+}
+
+.publication-authors {
+  /*color: #4286f4;*/
+}
+
+.publication-video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    overflow: hidden;
+    border-radius: 10px !important;
+}
+
+.publication-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.publication-body img {
+}
+
+.results-carousel {
+
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+
+.results-carousel .item {
+  position: relative;
+  margin: 5px;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 0;
+  color: white;
+  overflow: hidden;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  opacity: 0;
+  color: black;
+  font-size: 24px;
+}
+
+
+.results-carousel .item:hover img.img-thumbnail {
+  opacity: 0.1;
+  pointer-events: none; /* This will prevent the image from being interactive when hovered */
+}
+
+.results-carousel .item:hover .text-overlay {
+  opacity: 1;
+}
+
+
+
+
+.image-cont {
+  position: relative;
+  display: inline-block;
+}
+
+.interpolation-panel {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.interpolation-panel .interpolation-image {
+  width: 70%;
+  border-radius: 5px;
+}
+
+
+
+
+.interpolation-video-column {
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+#interpolation-image-wrapper {
+  width: 100%;
+}
+#interpolation-image-wrapper img {
+  border-radius: 0px;
+  display: block;
+}

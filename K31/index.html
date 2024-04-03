@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Kandinsky 3.1 is an open-source text-to-image diffusion model ">
+  <meta name="keywords" content="Kandinsky, Kandinsky 3.1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kandinsky 3.1</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/title.jpg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Kandinsky 3.1 </h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Vladimir Arkhipkin</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Andrei Filatov </a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Viacheslav Vasilev</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Anastasia Maltseva</a><sup>1</sup>,
+              </span>
+
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Said Azizov</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Igor Pavlov</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Julia Agafonova</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Andrey Kuznetsov</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ai-forever.github.io/Kandinsky-3/">Denis Dimitrov</a><sup>1,2</sup>
+              </span>
+            </div>
+  
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Sber AI&nbsp;&nbsp;&nbsp;</span>
+              <span class="author-block"><sup>2</sup>AIRI</span>
+            </div>
+  
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2312.03511.pdf"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/ai-forever/Kandinsky-3"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                    </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://fusionbrain.ai/"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <img src="static/logos/icons8-brush-100.png"></img>
+                    </span>
+                    <span>Draw</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://t.me/kandinsky21_bot"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <img src="static/logos/icons8-robot-100.png"></img>
+                    </span>
+                    <span>Bot</span>
+                  </a>
+                </span>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<!-- FusionFrames is a text-to-video generation model consisting of two main stages - keyframe generation and interpolation.  -->
+<!-- Our approach for temporal conditioning allows us to generate videos with high-quality appearance, smoothness and dynamics. -->
+<!--  -->
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+            <img src="./static/images/main_1.jpg"
+            class="img-thumbnail" 
+            alt="Interpolate start reference image."/>
+            <div class="text-overlay">
+              <div class="text">Amazing playful nice cute strawberry character, dynamic poze, surreal fantazy garden background, gorgeous masterpice, award winning photo, soft natural lighting, 
+                3d, Blender, Octane render, tilt - shift, deep field, colorful.</div>
+            </div>
+          </div>
+        <div class="item">
+          <img src="./static/images/main_2.png"
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">asphodel cenobite femme with multimedia rainbowcore organic shapes and elements of a primordial creature, minimalist, </div>
+          </div>
+        </div>
+        <div class="item item-shiba">
+          <img src="./static/images/main_3.jpg"
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">A beautiful landscape outdoors scene in the crochet knitting art style, drawing in style by Alfons Mucha</div>
+          </div>
+        </div>
+        <div class="item item-fullbody">
+          <img src="./static/images/main_4.jpg"
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">Car, mustang, movie, person, poster, car cover, person, in the style of alessandro gottardo, gold and cyan</div>
+          </div>
+        </div>
+        <div class="item item-blueshirt">
+          <img src="./static/images/main_5.jpg"
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">cloud in blue sky, a red lip, collage art, shuji terayama, dreamy objects, surreal, criterion collection </div>
+          </div>
+        </div>
+        <div class="item item-mask">
+          <img src="./static/images/main_7.jpg"
+          class="img-thumbnail" 
+          alt="Interpolate start reference image."/>
+          <div class="text-overlay">
+            <div class="text">gorgeous phoenix, cosmic, darkness, epic, cinematic, moonlight, stars, high - definition, texture,Oscar-Claude Monet</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+             We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scale text-to-image generation model based on latent diffusion, continuing the series of text-to-image Kandinsky models and reflecting our progress to achieve higher quality and realism of image generation. 
+             which we have enhanced and enriched with a variety of useful features and modes to give users more opportunities to fully utilise the power of our new model.
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Overall Pipeline</h2>
+        <div class="content has-text-justified">
+          <figure>
+          <img src="./static/images/K3_full_pipline.JPG"
+          class="interpolation-image"
+          alt="Interpolate start reference image."/> 
+          <figcaption></figcaption>
+        </figure>
+        <!-- <figure>
+          <img src="./static/images/kandinsky.jpg"
+            class="interpolation-image"
+            alt="Interpolate start reference image."/>
+            <figcaption>"Our U-Net architecture"</figcaption>
+        </figure> -->
+            <p class="bottom-three"></p>
+          <p class="'margined">
+            Kandinsky 3.0 is a latent diffusion model, the full pipeline of which includes a text encoder for processing a prompt from the user, 
+            a U-Net for predicting noise during denoising (reverse) process and a decoder for image reconstruction from the generated latent. 
+            During the U-Net training, the text encoder and image decoder were completely frozen. The whole model contains 11.9 billion parameters. 
+            For extended description of architecture please refer to <a href="https://arxiv.org/pdf/2312.03511.pdf">technical report</a>.
+          </p>
+        </div>
+      </div>    
+    </div>
+    <!--/ Matting. -->
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Kandinsky Flash</h2>
+        <div class="content has-text-justified">
+          <p class="'margined">
+            Diffusion models have problems with fast image generation.
+            To address this problem, we trained a Kandinksy Flash model based on the <a href="https://arxiv.org/abs/2311.17042">Adversarial Diffusion Distillation</a> approach with some modifications: we trained the model on latents, which reduced the memory overhead 
+            and removed distillation loss as it did not affect the training.
+        </p>
+          <div class="image-container">
+            <img src="static/images/flash/butterly_effect.jpg" alt="">
+            <img src="static/images/flash/inspiration.jpg" alt="Image 2">
+          </div>
+
+        </div>
+      </div>    
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Prompt beautification</h2>
+        <div class="content has-text-justified">
+          <p class="'margined">
+            Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we decided to use language model for making prompt better.
+            We used Intel's <a href="https://huggingface.co/Intel/neural-chat-7b-v3-1">neural-chat-7b-v3-1</a> with the following system promt as the LLM:
+            <blockquote >
+              <b>### System:</b> You are a prompt engineer. Your mission is to expand prompts written by user. You should provide the best prompt for text to image generation in English. <br>
+              <b>### User:</b><br>
+              {prompt}<br>
+              <b>### Assistant:</b><br>
+              {answer of the model}
+            </blockquote>
+                               
+        </p>
+      
+        <div class="image-container">
+            <img src="static/images/beautification/beautification_befrore.png" alt="Image 1"/>
+            <img src="static/images/beautification/beatufication_after.png" alt="Image 2"/>
+        </div>
+        </div>
+      </div>    
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Inpainting</h2>
+        <div class="content has-text-justified">
+          <p class="'margined">
+            To improve the generation quality of the inpainting model, we additionally trained the model on the object detection dataset. 
+            This allowed to get more stable generation of objects.
+        </p>
+          <div class="image-container">
+            <img src="static/images/inpainting/bear_mask.png" alt="">
+            <img src="static/images/inpainting/bear_image.png" alt="Image 2">
+          </div>
+          <div class="image-container">
+            <img src="static/images/inpainting/fox_mask.png" alt="Image 1">
+            <img src="static/images/inpainting/fox_image.png" alt="Image 2">
+          </div>
+
+        </div>
+      </div>    
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Kandinsky SuperRes</h2>
+        <div class="content has-text-justified">
+          <p class="'margined">
+            In the new Kandinsky 3.1 version, it is now possible to generate 4K resolution images using the KandiSuperRes model. 
+            The architecture used was the Kandinsky 3.0 architecture, which was modified as follows: the model became pixel-based to avoid compression artefacts, a modified UNet was used, and during training diffusion predicted the original image instead of noise.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Dataset</th>
+              <th>Model</th>
+              <th>FID↓</th>
+              <th>PSNR↑</th>
+              <th>SSIM↑</th>
+              <th>L1↓</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="3"><br><br>Wikidata 5k</td>
+              <td>Real-ESRGAN</td>
+              <td>9.96</td>
+              <td>24.48</td>
+              <td>0.73</td>
+              <td>0.042</td>
+            </tr>
+            <tr>
+              <td>Stable Diffusion</td>
+              <td>3.04</td>
+              <td>25.05</td>
+              <td>0.67</td>
+              <td>0.043</td>
+            </tr>
+            <tr>
+              <td>KandiSuperRes</td>
+              <td>0.89</td>
+              <td>28.52</td>
+              <td>0.81</td>
+              <td>0.025</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><br><br>RealSR(V3)</td>
+              <td>Real-ESRGAN</td>
+              <td>73.26</td>
+              <td>23.12</td>
+              <td>0.72</td>
+              <td>0.061</td>
+            </tr>
+            <tr>
+              <td>Stable Diffusion</td>
+              <td>47.79</td>
+              <td>24.85</td>
+              <td>0.67</td>
+              <td>0.049</td>
+            </tr>
+            <tr>
+              <td>KandiSuperRes</td>
+              <td>47.37</td>
+              <td>25.05</td>
+              <td>0.75</td>
+              <td>0.046</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><br><br>Set14</td>
+              <td>Real-ESRGAN</td>
+              <td>115.94</td>
+              <td>22.88</td>
+              <td>0.62</td>
+              <td>0.056</td>
+            </tr>
+            <tr>
+              <td>Stable Diffusion</td>
+              <td>76.32</td>
+              <td>23.60</td>
+              <td>0.57</td>
+              <td>0.052</td>
+            </tr>
+            <tr>
+              <td>KandiSuperRes</td>
+              <td>61.00</td>
+              <td>25.70</td>
+              <td>0.70</td>
+              <td>0.039</td>
+            </tr>
+          </tbody>
+          </table>
+        
+          <div class="image-container">
+            <img src="static/images/superres/super_res_1.png" alt="Image 1"/>
+            <img src="static/images/superres/super_res_2.png" alt="Image 2"/>
+          </div>
+        </div>
+      </div>    
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">IP-Adapter</h2>
+        <div class="content has-text-justified">
+          <p class="'margined">
+            To allow image generation in based on reference image we train IP-Adapter, which to generate image based on the style of image, text and generate variations of the image
+        </p>
+      
+        <div class="Image">
+            <img src="static/images/ip-adapter/ip-adapter-2.png" alt="Image 1"/>
+            <img src="static/images/ip-adapter/ip-adapter-3.png" alt="Image 1"/>
+            <img src="static/images/ip-adapter/ip-adapter-4.png" alt="Image 1"/>
+            <img src="static/images/ip-adapter/ip-adapter-1.png" alt="Image 1"/>
+        </div>
+        </div>
+      </div>    
+    </div>
+<hr>
+<section class="section" id="Acknowledgment">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Acknowledgment</h2>
+
+    The authors would also like to extend their deepest gratitude to the following list of teams and persons, who made a
+    significant contribution to Kandinsky 3.1 research and development:
+    <ul>
+    <li> Sber AI Research team:  Ilya Ryabov,
+    Mikhail Martynov, Anastasia Lysenko, Zein Shaheen; </li>
+    <li> Anton Razzhigaev and Elizaveta Dakhova from AIRI; </li>
+    <li>  Konstantin Kulikov and his production team at Sber AI; </li>
+    <li>  Sergey Markov and his research teams at Sber Devices; </li>
+    <li>  Polina Voloshina labelling team; </li>
+    <li>  ABC Elementary labelling team; </li>
+    <li>  TagMe labelling team ; </li>
+    <li>  Tatyana Paskova, Angelina Kuts and prompt engineering team; </li>
+  </ul>
+<br</br>
+Thanks to all of you for your valuable help, advice, and constructive criticism
+</div></section>
+</section>
+<hr>
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{arkhipkin2023kandinsky,
+      title={Kandinsky 3.0 Technical Report}, 
+      author={Vladimir Arkhipkin and Andrei Filatov and Viacheslav Vasilev and Anastasia Maltseva and Said Azizov and Igor Pavlov and Julia Agafonova and Andrey Kuznetsov and Denis Dimitrov},
+      year={2023},
+      eprint={2312.03511},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
