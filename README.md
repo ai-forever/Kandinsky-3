@@ -12,6 +12,8 @@ We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scal
 
 ## Kandinsky Flash
 
+Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training.
+
 ```python
 from kandinsky3 import get_T2I_Flash_pipeline
 
