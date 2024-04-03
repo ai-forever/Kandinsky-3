@@ -12,6 +12,26 @@ We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scal
 
 ## Kandinsky Flash
 
+```python
+from kandinsky3 import get_T2I_Flash_pipeline
+
+device_map = torch.device('cuda:0')
+dtype_map = {
+    'unet': torch.float32,
+    'text_encoder': torch.float16,
+    'movq': torch.float32,
+}
+
+t2i_pipe = get_T2I_Flash_pipeline(
+    device_map, dtype_map,
+    unet_path='../weights/kandinsky3_flash.pt',
+    text_encoder_path='../weights/flan_ul2_encoder/',
+    movq_path='../weights/movq.pt'
+)
+
+res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
+```
+
 ## Prompt beautification
 
 Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we decided to use language model for making prompt better. We used Intel's [neural-chat-7b-v3-1](https://huggingface.co/Intel/neural-chat-7b-v3-1) with the following system prompt as the LLM:
@@ -27,10 +47,6 @@ Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we d
 ## KandiSuperRes
 
 To learn more about KandiSuperRes, please checkout: https://github.com/ai-forever/KandiSuperRes/
-
-
-
-##
 
 # Kandinsky 3.0:
 
@@ -87,18 +103,6 @@ image = t2i_pipe( "A cute corgi lives in a house made out of sushi.")
 ```
 
 ### 2. inpainting
-
-```python
-from kandinsky3 import get_inpainting_pipeline
-
-inp_pipe = get_T2I_pipeline('cuda', fp16=True)
-
-image = ... # PIL Image
-mask = ... # Numpy array (HxW). Set 1 where image should be masked
-image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mask)
-```
-
-### 3. kandinsky flash
 
 ```python
 from kandinsky3 import get_inpainting_pipeline
