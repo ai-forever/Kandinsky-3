@@ -4,6 +4,36 @@
 
 [Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
 
+# Kandinsky 3.1:
+
+## Description:
+
+We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scale text-to-image generation model based on latent diffusion, continuing the series of text-to-image Kandinsky models and reflecting our progress to achieve higher quality and realism of image generation, which we have enhanced and enriched with a variety of useful features and modes to give users more opportunities to fully utilise the power of our new model.
+
+## Kandinsky Flash
+
+## Prompt beautification
+
+Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we decided to use language model for making prompt better. We used Intel's [neural-chat-7b-v3-1](https://huggingface.co/Intel/neural-chat-7b-v3-1) with the following system prompt as the LLM:
+
+```
+### System: You are a prompt engineer. Your mission is to expand prompts written by user. You should provide the best prompt for text to image generation in English.
+### User:
+{prompt}
+### Assistant:
+{answer of the model}
+```
+
+## KandiSuperRes
+
+To learn more about KandiSuperRes, please checkout: https://github.com/ai-forever/KandiSuperRes/
+
+
+
+##
+
+# Kandinsky 3.0:
+
 ## Description:
 
 Kandinsky 3.0 is an open-source text-to-image diffusion model built upon the Kandinsky2-x model family. In comparison to its predecessors, Kandinsky 3.0 incorporates more data and specifically related to Russian culture, which allows to generate pictures related to Russin culture. Furthermore, enhancements have been made to the text understanding and visual quality of the model, achieved by increasing the size of the text encoder and Diffusion U-Net models, respectively.
