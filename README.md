@@ -14,9 +14,6 @@ We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scal
 
 <figure>
   <img src="assets/butterly_effect.jpg">
-  <center><figcaption> 
-  Butterly effect
-  </figcaption></center>
 </figure>
 
 
@@ -55,9 +52,6 @@ res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
 
 <figure>
   <img src="assets/prompt_beautifcation.png">
-  <center><figcaption> 
-  Original prompt: Lego figure at the waterfall (w/o vs w/ LLM).  
-  </figcaption></center>
 </figure>
 
 
