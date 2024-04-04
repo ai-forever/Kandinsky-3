@@ -2,7 +2,92 @@
 
 ![](assets/title.jpg)
 
-[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Medium Post](https://medium.com/@filatovandreiv/kandinsky-3-0-a-new-model-for-generating-images-from-text-abe13e3bd6ab) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
+[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
+
+# Kandinsky 3.1:
+
+## Description:
+
+We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scale text-to-image generation model based on latent diffusion, continuing the series of text-to-image Kandinsky models and reflecting our progress to achieve higher quality and realism of image generation, which we have enhanced and enriched with a variety of useful features and modes to give users more opportunities to fully utilise the power of our new model.
+
+## Kandinsky Flash
+
+<figure>
+  <img src="assets/butterly_effect.jpg">
+  <center><figcaption> 
+  Butterly effect
+  </figcaption></center>
+</figure>
+
+
+Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training.
+
+### Architecture
+
+For training Kandinsky Flash we used the following architecture of discriminator. It is the half of Kandinsky 3.0 U-Net encoder with additional head predictions.
+
+<img src="assets/architecture.png">
+
+### How to use:
+Check our jupyter notebooks with examples in `./examples` folder
+
+```python
+from kandinsky3 import get_T2I_Flash_pipeline
+
+device_map = torch.device('cuda:0')
+dtype_map = {
+    'unet': torch.float32,
+    'text_encoder': torch.float16,
+    'movq': torch.float32,
+}
+
+t2i_pipe = get_T2I_Flash_pipeline(
+    device_map, dtype_map,
+    unet_path='../weights/kandinsky3_flash.pt',
+    text_encoder_path='../weights/flan_ul2_encoder/',
+    movq_path='../weights/movq.pt'
+)
+
+res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
+```
+
+## Prompt beautification
+
+<figure>
+  <img src="assets/prompt_beautifcation.png">
+  <center><figcaption> 
+  Original prompt: Lego figure at the waterfall (w/o vs w/ LLM).  
+  </figcaption></center>
+</figure>
+
+
+Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we decided to use language model for making prompt better. We used Intel's [neural-chat-7b-v3-1](https://huggingface.co/Intel/neural-chat-7b-v3-1) with the following system prompt as the LLM:
+
+```
+### System: You are a prompt engineer. Your mission is to expand prompts written by user. You should provide the best prompt for text to image generation in English.
+### User:
+{prompt}
+### Assistant:
+{answer of the model}
+```
+
+## KandiSuperRes
+
+<figure>
+  <img src="assets/superres.png">
+</figure>
+
+To learn more about KandiSuperRes, please checkout: https://github.com/ai-forever/KandiSuperRes/
+
+## Kandinsky IP-Adapter & Kandinsky ControlNet
+
+<figure>
+  <img src="assets/ip-adapter.png">
+</figure>
+
+To allow using image as condition in Kandinsky model, we trained IP-Adapter and HED-based ControlNet model. For more details please check out: https://github.com/ai-forever/kandinsky3-diffusers
+
+# Kandinsky 3.0:
 
 ## Description:
 

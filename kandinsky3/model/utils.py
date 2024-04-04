@@ -21,10 +21,11 @@ def set_default_layer(condition, layer_1, args_1=[], kwargs_1={}, layer_2=Identi
 
 
 def get_tensor_items(x, pos, broadcast_shape):
+    device = pos.device
     bs = pos.shape[0]
     ndims = len(broadcast_shape[1:])
-    x = x.to(pos.device)[pos]
-    return x.reshape(bs, *((1,) * ndims))
+    x = x.cpu()[pos.cpu()]
+    return x.reshape(bs, *((1,) * ndims)).to(device)
 
 
 def local_patching(x, height, width, group_size):
