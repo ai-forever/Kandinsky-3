@@ -124,7 +124,6 @@ class Kandinsky3InpaintingPipeline:
         with torch.no_grad():
             batch = self.prepare_batch(text, negative_text, image, mask)
             processed = self.shared_step(batch)
-
             betas = get_named_beta_schedule('cosine', 1000)
             base_diffusion = BaseDiffusion(betas, percentile=0.95)
             times = list(range(999, 0, -1000 // steps))
@@ -150,13 +149,14 @@ class Kandinsky3InpaintingPipeline:
                 minibatch = masked_latent.shape[0]
 
                 with torch.cuda.amp.autocast(dtype=self.dtype_map['unet']):
-                    images = base_diffusion.p_sample_loop(
-                        self.unet, (minibatch, 4, masked_latent.shape[2], masked_latent.shape[3]), times,
-                        self.device_map['unet'],
-                        bs_context, bs_context_mask, self.null_embedding, guidance_weight_text, eta,
-                        negative_context=bs_negative_context, negative_context_mask=bs_negative_context_mask,
-                        mask=mask, masked_latent=masked_latent, gan=False
-                    )
+                    with torch.no_grad():
+                        images = base_diffusion.p_sample_loop(
+                            self.unet, (minibatch, 4, masked_latent.shape[2], masked_latent.shape[3]), times,
+                            self.device_map['unet'],
+                            bs_context, bs_context_mask, self.null_embedding, guidance_weight_text, eta,
+                            negative_context=bs_negative_context, negative_context_mask=bs_negative_context_mask,
+                            mask=mask, masked_latent=masked_latent, gan=False
+                        )
 
                 with torch.cuda.amp.autocast(dtype=self.dtype_map['movq']):
                     images = torch.cat([self.movq.decode(image) for image in images.chunk(2)])
