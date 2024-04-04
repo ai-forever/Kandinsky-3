@@ -2,7 +2,7 @@
 
 ![](assets/title.jpg)
 
-[Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
+[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf)
 
 # Kandinsky 3.1:
 
@@ -12,7 +12,21 @@ We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scal
 
 ## Kandinsky Flash
 
+<figure>
+  <img src="assets/butterly_effect.jpg">
+  <center><figcaption> 
+  Butterly effect
+  </figcaption></center>
+</figure>
+
+
 Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training.
+
+### Architecture
+
+For training Kandinsky Flash we used the following architecture of discriminator. It is the half of Kandinsky 3.0 U-Net encoder with additional head predictions.
+
+<img src="assets/architecture.png">
 
 ### How to use:
 Check our jupyter notebooks with examples in `./examples` folder
@@ -39,6 +53,14 @@ res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
 
 ## Prompt beautification
 
+<figure>
+  <img src="assets/prompt_beautifcation.png">
+  <center><figcaption> 
+  Original prompt: Lego figure at the waterfall (w/o vs w/ LLM).  
+  </figcaption></center>
+</figure>
+
+
 Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we decided to use language model for making prompt better. We used Intel's [neural-chat-7b-v3-1](https://huggingface.co/Intel/neural-chat-7b-v3-1) with the following system prompt as the LLM:
 
 ```
@@ -51,11 +73,19 @@ Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we d
 
 ## KandiSuperRes
 
+<figure>
+  <img src="assets/superres.png">
+</figure>
+
 To learn more about KandiSuperRes, please checkout: https://github.com/ai-forever/KandiSuperRes/
 
 ## Kandinsky IP-Adapter & Kandinsky ControlNet
 
-To allow using image as condition in Kandinsky model, we trained IP-Adapter and HED-based ControlNet model. For more details please check out: https://github.com/ai-forever/kandinsky3-diffusers.git
+<figure>
+  <img src="assets/ip-adapter.png">
+</figure>
+
+To allow using image as condition in Kandinsky model, we trained IP-Adapter and HED-based ControlNet model. For more details please check out: https://github.com/ai-forever/kandinsky3-diffusers
 
 # Kandinsky 3.0:
 
