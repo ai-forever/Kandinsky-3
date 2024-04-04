@@ -152,13 +152,13 @@ def get_T2I_pipeline(
 
     if unet_path is None:
         unet_path = hf_hub_download(
-            repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3.pt', cache_dir=cache_dir
+            repo_id="ai-forever/Kandinsky3.1", filename='weights/kandinsky3.pt', cache_dir=cache_dir
         )
     if text_encoder_path is None:
         text_encoder_path = 'google/flan-ul2'
     if movq_path is None:
         movq_path = hf_hub_download(
-            repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt', cache_dir=cache_dir
+            repo_id="ai-forever/Kandinsky3.1", filename='weights/movq.pt', cache_dir=cache_dir
         )
 
     unet, null_embedding = get_T2I_unet(device_map['unet'], unet_path, dtype=dtype_map['unet'])
@@ -195,13 +195,13 @@ def get_T2I_Flash_pipeline(
 
     if unet_path is None:
         unet_path = hf_hub_download(
-            repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_flash.pt', cache_dir=cache_dir
+            repo_id="ai-forever/Kandinsky3.1", filename='weights/kandinsky3_flash.pt', cache_dir=cache_dir
         )
     if text_encoder_path is None:
         text_encoder_path = 'google/flan-ul2'
     if movq_path is None:
         movq_path = hf_hub_download(
-            repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt', cache_dir=cache_dir
+            repo_id="ai-forever/Kandinsky3.1", filename='weights/movq.pt', cache_dir=cache_dir
         )
 
     unet, null_embedding = get_T2I_unet(device_map['unet'], unet_path, dtype=dtype_map['unet'])
@@ -238,13 +238,13 @@ def get_inpainting_pipeline(
 
     if unet_path is None:
         unet_path = hf_hub_download(
-            repo_id="ai-forever/Kandinsky3.0", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
+            repo_id="ai-forever/Kandinsky3.1", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
         )
     if text_encoder_path is None:
         text_encoder_path = 'google/flan-ul2'
     if movq_path is None:
         movq_path = hf_hub_download(
-            repo_id="ai-forever/Kandinsky3.0", filename='weights/movq.pt', cache_dir=cache_dir
+            repo_id="ai-forever/Kandinsky3.1", filename='weights/movq.pt', cache_dir=cache_dir
         )
 
     unet, null_embedding = get_inpainting_unet(device_map['unet'], unet_path, dtype=dtype_map['unet'])
