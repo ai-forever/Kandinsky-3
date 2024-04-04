@@ -39,10 +39,7 @@ dtype_map = {
 }
 
 t2i_pipe = get_T2I_Flash_pipeline(
-    device_map, dtype_map,
-    unet_path='../weights/kandinsky3_flash.pt',
-    text_encoder_path='../weights/flan_ul2_encoder/',
-    movq_path='../weights/movq.pt'
+    device_map, dtype_map
 )
 
 res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
