@@ -254,6 +254,7 @@
             and removed distillation loss as it did not affect the training.
         </p>
           <div class="image-container">
+            
             <img src="static/images/flash/butterly_effect.jpg" alt="">
             <img src="static/images/flash/inspiration.jpg" alt="Image 2">
           </div>
@@ -315,6 +316,7 @@
           <p class="'margined">
             In the new Kandinsky 3.1 version, it is now possible to generate 4K resolution images using the KandiSuperRes model. 
             The architecture used was the Kandinsky 3.0 architecture, which was modified as follows: the model became pixel-based to avoid compression artefacts, a modified UNet was used, and during training diffusion predicted the original image instead of noise.
+            For more details please check out the <a href="https://github.com/ai-forever/KandiSuperRes/">repository</a>.
         </p>
 
         <table>
@@ -407,10 +409,11 @@
     </div>
     <div class="columns is-centered has-text-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">IP-Adapter</h2>
+        <h2 class="title is-3">Kandinsky IP-Adapter & Kandinksy ControlNet</h2>
         <div class="content has-text-justified">
           <p class="'margined">
-            To allow image generation in based on reference image we train IP-Adapter, which to generate image based on the style of image, text and generate variations of the image
+            To allow image generation in based on reference image we train IP-Adapter, which to generate image based on the style of image, text and generate variations of the image. 
+            Also, we trained HED-based ControlNet model. For more details please check out the <a href="https://github.com/ai-forever/kandinsky3-diffusers">repository</a>. 
         </p>
       
         <div class="Image">
