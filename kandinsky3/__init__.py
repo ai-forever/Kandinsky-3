@@ -2,7 +2,7 @@ import os
 from typing import Optional, Union
 
 import torch
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download, snapshot_download
 
 from kandinsky3.model.unet import UNet
 from kandinsky3.movq import MoVQ
@@ -155,7 +155,10 @@ def get_T2I_pipeline(
             repo_id="ai-forever/Kandinsky3.1", filename='weights/kandinsky3.pt', cache_dir=cache_dir
         )
     if text_encoder_path is None:
-        text_encoder_path = 'google/flan-ul2'
+        text_encoder_path = snapshot_download(
+            repo_id="ai-forever/Kandinsky3.1", allow_patterns="weights/flan_ul2_encoder/*", cache_dir=cache_dir
+        )
+        text_encoder_path = os.path.join(text_encoder_path, 'weights/flan_ul2_encoder')
     if movq_path is None:
         movq_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.1", filename='weights/movq.pt', cache_dir=cache_dir
@@ -198,7 +201,10 @@ def get_T2I_Flash_pipeline(
             repo_id="ai-forever/Kandinsky3.1", filename='weights/kandinsky3_flash.pt', cache_dir=cache_dir
         )
     if text_encoder_path is None:
-        text_encoder_path = 'google/flan-ul2'
+        text_encoder_path = snapshot_download(
+            repo_id="ai-forever/Kandinsky3.1", allow_patterns="weights/flan_ul2_encoder/*", cache_dir=cache_dir
+        )
+        text_encoder_path = os.path.join(text_encoder_path, 'weights/flan_ul2_encoder')
     if movq_path is None:
         movq_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.1", filename='weights/movq.pt', cache_dir=cache_dir
@@ -241,7 +247,10 @@ def get_inpainting_pipeline(
             repo_id="ai-forever/Kandinsky3.1", filename='weights/kandinsky3_inpainting.pt', cache_dir=cache_dir
         )
     if text_encoder_path is None:
-        text_encoder_path = 'google/flan-ul2'
+        text_encoder_path = snapshot_download(
+            repo_id="ai-forever/Kandinsky3.1", allow_patterns="weights/flan_ul2_encoder/*", cache_dir=cache_dir
+        )
+        text_encoder_path = os.path.join(text_encoder_path, 'weights/flan_ul2_encoder')
     if movq_path is None:
         movq_path = hf_hub_download(
             repo_id="ai-forever/Kandinsky3.1", filename='weights/movq.pt', cache_dir=cache_dir
