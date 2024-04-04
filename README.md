@@ -125,11 +125,25 @@ Check our jupyter notebooks with examples in `./examples` folder
 ### 1. text2image
 
 ```python
+import sys
+sys.path.append('..')
+
+import torch
 from kandinsky3 import get_T2I_pipeline
 
-t2i_pipe = get_T2I_pipeline('cuda', fp16=True)
+device_map = torch.device('cuda:0')
+dtype_map = {
+    'unet': torch.float32,
+    'text_encoder': torch.float16,
+    'movq': torch.float32,
+}
 
-image = t2i_pipe( "A cute corgi lives in a house made out of sushi.")
+t2i_pipe = get_T2I_pipeline(
+    device_map, dtype_map,
+)
+res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
+
+res[0]
 ```
 
 ### 2. inpainting
@@ -137,7 +151,16 @@ image = t2i_pipe( "A cute corgi lives in a house made out of sushi.")
 ```python
 from kandinsky3 import get_inpainting_pipeline
 
-inp_pipe = get_inpainting_pipeline('cuda', fp16=True)
+device_map = torch.device('cuda:0')
+dtype_map = {
+    'unet': torch.float16,
+    'text_encoder': torch.float16,
+    'movq': torch.float32,
+}
+
+pipe = get_inpainting_pipeline(
+    device_map, dtype_map,
+)
 
 image = ... # PIL Image
 mask = ... # Numpy array (HxW). Set 1 where image should be masked
