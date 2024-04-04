@@ -140,7 +140,7 @@ def get_T2I_pipeline(
         text_encoder_path: str = None,
         movq_path: str = None,
 ) -> Kandinsky3T2IPipeline:
-    assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
+    # assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
     if not isinstance(device_map, dict):
         device_map = {
             'unet': device_map, 'text_encoder': device_map, 'movq': device_map
@@ -186,7 +186,7 @@ def get_T2I_Flash_pipeline(
         text_encoder_path: str = None,
         movq_path: str = None,
 ) -> Kandinsky3T2IPipeline:
-    assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
+    # assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
     if not isinstance(device_map, dict):
         device_map = {
             'unet': device_map, 'text_encoder': device_map, 'movq': device_map
@@ -232,7 +232,7 @@ def get_inpainting_pipeline(
         text_encoder_path: str = None,
         movq_path: str = None,
 ) -> Kandinsky3InpaintingPipeline:
-    assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
+    # assert ((unet_path is not None) or (text_encoder_path is not None) or (movq_path is not None))
     if not isinstance(device_map, dict):
         device_map = {
             'unet': device_map, 'text_encoder': device_map, 'movq': device_map
