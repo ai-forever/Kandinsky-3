@@ -53,6 +53,10 @@ Prompt plays crucial role in text-to-image generation. So, in Kandinsky 3.1 we d
 
 To learn more about KandiSuperRes, please checkout: https://github.com/ai-forever/KandiSuperRes/
 
+## Kandinsky IP-Adapter & Kandinsky ControlNet
+
+To allow using image as condition in Kandinsky model, we trained IP-Adapter and HED-based ControlNet model. For more details please check out: https://github.com/ai-forever/kandinsky3-diffusers.git
+
 # Kandinsky 3.0:
 
 ## Description:
