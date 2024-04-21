@@ -2,7 +2,7 @@
 
 ![](assets/title.jpg)
 
-[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf) | [![Replicate](https://replicate.com/cjwbw/kandinskyvideo/badge)]([https://replicate.com/cjwbw/kandinskyvideo](https://replicate.com/asiryan/kandinsky-3.0)) 
+[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Kandinsky 3.1 Post](https://habr.com/ru/companies/sberbank/articles/805337/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf) | [![Replicate](https://replicate.com/cjwbw/kandinskyvideo/badge)]([https://replicate.com/cjwbw/kandinskyvideo](https://replicate.com/asiryan/kandinsky-3.0)) | [HuggingFace](https://huggingface.co/kandinsky-community/kandinsky-3)
 
 # Kandinsky 3.1:
 
@@ -17,7 +17,7 @@ We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scal
 </figure>
 
 
-Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training.
+Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training. Also we used Kandinsky Flash model to improve visual quality of generation from Kandinsky 3.0.
 
 ### Architecture
 
