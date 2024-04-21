@@ -10,14 +10,14 @@
 
 We present Kandinsky 3.1, the follow-up to the Kandinsky 3.0 model, a large-scale text-to-image generation model based on latent diffusion, continuing the series of text-to-image Kandinsky models and reflecting our progress to achieve higher quality and realism of image generation, which we have enhanced and enriched with a variety of useful features and modes to give users more opportunities to fully utilise the power of our new model.
 
-## Kandinsky Flash
+## Kandinsky Flash (Kandinsky 3.0 Refiner)
 
 <figure>
   <img src="assets/butterly_effect.jpg">
 </figure>
 
 
-Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training. Also we used Kandinsky Flash model to improve visual quality of generation from Kandinsky 3.0.
+Diffusion models have problems with fast image generation. To address this problem, we trained a Kandinksy Flash model based on the [Adversarial Diffusion Distillation](https://arxiv.org/abs/2311.17042) approach with some modifications: we trained the model on latents, which reduced the memory overhead and removed distillation loss as it did not affect the training. Also, we applied Kandinsky Flash model to images generated from Kandinsky 3.0 to improve visual quality of generated images.
 
 ### Architecture
 
@@ -44,6 +44,10 @@ t2i_pipe = get_T2I_Flash_pipeline(
 
 res = t2i_pipe("A cute corgi lives in a house made out of sushi.")
 ```
+### Kandinsky Inpainting
+
+Also, we released a newer version of inpainting model, which we additionally trained the model on the object detection dataset. This allowed to get more stable generation of objects. The new weights are available at [ai-forever/Kandinsky3.1](https://huggingface.co/ai-forever/Kandinsky3.1). Check the usage [example](https://github.com/ai-forever/Kandinsky-3?tab=readme-ov-file#2-inpainting).
+
 
 ## Prompt beautification
 
