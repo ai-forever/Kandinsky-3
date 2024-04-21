@@ -221,7 +221,7 @@
       <h2 class="title is-3">Table of Contents</h2>
       <ul style="text-align: center; list-style: none; padding: 0;">
       <ul style="display: inline-block; margin-right: 20px;"><a href="#pipeline">Overall Pipeline</a></ul>
-      <ul style="display: inline-block; margin-right: 20px;"><a href="#flash">Kandinksy Flash</a></ul>
+      <ul style="display: inline-block; margin-right: 20px;"><a href="#flash">Kandinksy Flash (Kandinsky 3.0 Refiner)</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#prompt">Prompt Beautification</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#inpainting">Kandinsky Inpainting</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#res">Kandinksy SuperRes</a></ul>
@@ -261,7 +261,7 @@
     
     <div class="columns is-centered has-text-centered" id="flash">
       <div class="column is-full-width">
-        <h2 class="title is-3">Kandinsky Flash (Refiner)</h2>
+        <h2 class="title is-3">Kandinsky Flash (Kandinsky 3.0 Refiner)</h2>
         <div class="content has-text-justified">
           <p class="'margined">
             Diffusion models have problems with fast image generation.
@@ -273,10 +273,16 @@
             <img src="static/images/flash/butterly_effect.jpg" alt="">
             <img src="static/images/flash/inspiration.jpg" alt="Image 2">
           </div>
-          Also we used Kandinsky Flash model to improve visual quality of generation from Kandinsky 3.0.
-          <div class="image-container">
+          Also we applied Kandinsky Flash model to images generated from Kandinsky 3.0 to improve visual quality of generated images.
+          <div class="image-container-mine">
+            <figure>
             <img src="static/images/k31/refine_before.jpg" alt="">
+            <figcaption>Before Refinement</figcaption>
+            </figure>
+            <figure>
             <img src="static/images/k31/refine_after.jpg" alt="Image 2">
+            <figcaption>After Refinement</figcaption>
+            </figure>
           </div>
         </div>
       </div>    
