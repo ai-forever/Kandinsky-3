@@ -223,7 +223,7 @@
       <ul style="display: inline-block; margin-right: 20px;"><a href="#pipeline">Overall Pipeline</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#flash">Kandinksy Flash</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#prompt">Prompt Beautification</a></ul>
-      <ul style="display: inline-block; margin-right: 20px;"><a href="#inpainting">Inpainting</a></ul>
+      <ul style="display: inline-block; margin-right: 20px;"><a href="#inpainting">Kandinsky Inpainting</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#res">Kandinksy SuperRes</a></ul>
       <ul style="display: inline-block; margin-right: 20px;"><a href="#image">Kandinksy IP-Adapter & Kandinsky ControlNet</a></ul>
       </div>
@@ -231,8 +231,8 @@
   </div>
 
   
-  <div class="container is-max-desktop" id="#pipeline">
-    <div class="columns is-centered has-text-centered">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered" id="#pipeline">
       <div class="column is-full-width">
         <h2 class="title is-3">Overall Pipeline</h2>
         <div class="content has-text-justified">
@@ -250,7 +250,7 @@
         </figure> -->
             <p class="bottom-three"></p>
           <p class="'margined">
-            Kandinsky 3.0 is a latent diffusion model, the full pipeline of which includes a text encoder for processing a prompt from the user, 
+            Kandinsky 3.1 is a latent diffusion model, the full pipeline of which includes a text encoder for processing a prompt from the user, 
             a U-Net for predicting noise during denoising (reverse) process and a decoder for image reconstruction from the generated latent. 
             During the U-Net training, the text encoder and image decoder were completely frozen. The whole model contains 11.9 billion parameters. 
             For extended description of architecture please refer to <a href="https://arxiv.org/pdf/2312.03511.pdf">technical report</a>.
@@ -258,11 +258,10 @@
         </div>
       </div>    
     </div>
-    <!--/ Matting. -->
     
     <div class="columns is-centered has-text-centered" id="#flash">
       <div class="column is-full-width">
-        <h2 class="title is-3">Kandinsky Flash</h2>
+        <h2 class="title is-3">Kandinsky Flash (Refiner)</h2>
         <div class="content has-text-justified">
           <p class="'margined">
             Diffusion models have problems with fast image generation.
@@ -274,7 +273,11 @@
             <img src="static/images/flash/butterly_effect.jpg" alt="">
             <img src="static/images/flash/inspiration.jpg" alt="Image 2">
           </div>
-
+          Also we used Kandinsky Flash model to improve visual quality of generation from Kandinsky 3.0.
+          <div class="image-container"></div>
+            <img src="static/images/k31/refine_before.jpg" alt="">
+            <img src="static/images/k31/refine_after.jpg" alt="Image 2">
+          </div>
         </div>
       </div>    
     </div>
@@ -306,7 +309,7 @@
 
     <div class="columns is-centered has-text-centered" id=#inpainting>
       <div class="column is-full-width">
-        <h2 class="title is-3">Inpainting</h2>
+        <h2 class="title is-3">Kandinsky Inpainting</h2>
         <div class="content has-text-justified">
           <p class="'margined">
             To improve the generation quality of the inpainting model, we additionally trained the model on the object detection dataset. 
