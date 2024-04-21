@@ -76,11 +76,6 @@ img.img-thumbnail {
   font-variant: small-caps;
 }
 
-.image-container-mine {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .image-container {
   display: flex;
 }
