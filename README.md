@@ -2,7 +2,7 @@
 
 ![](assets/title.jpg)
 
-[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Kandinsky 3.1 Post](https://habr.com/ru/companies/sberbank/articles/805337/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf) |  [HuggingFace](https://huggingface.co/kandinsky-community/kandinsky-3) | [![Replicate](https://replicate.com/cjwbw/kandinskyvideo/badge)]([https://replicate.com/cjwbw/kandinskyvideo](https://replicate.com/asiryan/kandinsky-3.0))
+[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Kandinsky 3.1 Post](https://habr.com/ru/companies/sberbank/articles/805337/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf) |  [HuggingFace](https://huggingface.co/kandinsky-community/kandinsky-3) 
 
 # Kandinsky 3.1:
 
