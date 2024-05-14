@@ -2,14 +2,7 @@
 
 ![](assets/title.jpg)
 
-[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Kandinsky 3.1 Post](https://habr.com/ru/companies/sberbank/articles/805337/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf) |  [HuggingFace](https://huggingface.co/kandinsky-community/kandinsky-3) | [Colab](https://colab.research.google.com/drive/1aNiR1Qb2_8dk_BRzCgGkGPehn3dK-xMy?usp=sharing)
-
-# Updates :fire::fire:
------------------ 
-2024/12/15: Kandinsky 3.1 Released
-
-2023/11/22: Kandinsky 3.0 Released 
-
+[Kandinsky 3.0 Post](https://habr.com/ru/companies/sberbank/articles/775590/) | [Kandinsky 3.1 Post](https://habr.com/ru/companies/sberbank/articles/805337/) | [Project Page](https://ai-forever.github.io/Kandinsky-3) | [Generate](https://fusionbrain.ai) | [Telegram-bot](https://t.me/kandinsky21_bot) | [Technical Report](https://arxiv.org/pdf/2312.03511.pdf) |  [HuggingFace](https://huggingface.co/kandinsky-community/kandinsky-3) |
 
 # Kandinsky 3.1:
 
