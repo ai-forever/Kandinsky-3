@@ -217,7 +217,8 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 + Denis Dimitrov: [Github](https://github.com/denndimitrov), [Blog](https://t.me/dendi_math_ai)
 
 ## Citation
-```
+
+```bibtex
 @inproceedings{vladimir-etal-2024-kandinsky,
     title = "Kandinsky 3: Text-to-Image Synthesis for Multifunctional Generative Framework",
     author = "Vladimir, Arkhipkin  and
@@ -246,7 +247,7 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 }
 ```
 
-```
+```bibtex
 @misc{arkhipkin2023kandinsky,
       title={Kandinsky 3.0 Technical Report}, 
       author={Vladimir Arkhipkin and Andrei Filatov and Viacheslav Vasilev and Anastasia Maltseva and Said Azizov and Igor Pavlov and Julia Agafonova and Andrey Kuznetsov and Denis Dimitrov},
