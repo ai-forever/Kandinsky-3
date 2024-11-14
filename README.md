@@ -218,13 +218,31 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 
 ## Citation
 ```
-@misc{arkhipkin2023kandinsky,
-      title={Kandinsky 3.0 Technical Report}, 
-      author={Vladimir Arkhipkin and Andrei Filatov and Viacheslav Vasilev and Anastasia Maltseva and Said Azizov and Igor Pavlov and Julia Agafonova and Andrey Kuznetsov and Denis Dimitrov},
-      year={2023},
-      eprint={2312.03511},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{vladimir-etal-2024-kandinsky,
+    title = "Kandinsky 3: Text-to-Image Synthesis for Multifunctional Generative Framework",
+    author = "Vladimir, Arkhipkin  and
+      Vasilev, Viacheslav  and
+      Filatov, Andrei  and
+      Pavlov, Igor  and
+      Agafonova, Julia  and
+      Gerasimenko, Nikolai  and
+      Averchenkova, Anna  and
+      Mironova, Evelina  and
+      Anton, Bukashkin  and
+      Kulikov, Konstantin  and
+      Kuznetsov, Andrey  and
+      Dimitrov, Denis",
+    editor = "Hernandez Farias, Delia Irazu  and
+      Hope, Tom  and
+      Li, Manling",
+    booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.emnlp-demo.48",
+    pages = "475--485",
+    abstract = "Text-to-image (T2I) diffusion models are popular for introducing image manipulation methods, such as editing, image fusion, inpainting, etc. At the same time, image-to-video (I2V) and text-to-video (T2V) models are also built on top of T2I models. We present Kandinsky 3, a novel T2I model based on latent diffusion, achieving a high level of quality and photorealism. The key feature of the new architecture is the simplicity and efficiency of its adaptation for many types of generation tasks. We extend the base T2I model for various applications and create a multifunctional generation system that includes text-guided inpainting/outpainting, image fusion, text-image fusion, image variations generation, I2V and T2V generation. We also present a distilled version of the T2I model, evaluating inference in 4 steps of the reverse process without reducing image quality and 3 times faster than the base model. We deployed a user-friendly demo system in which all the features can be tested in the public domain. Additionally, we released the source code and checkpoints for the Kandinsky 3 and extended models. Human evaluations show that Kandinsky 3 demonstrates one of the highest quality scores among open source generation systems.",
 }
 ```
 
