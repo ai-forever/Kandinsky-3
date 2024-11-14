@@ -246,3 +246,13 @@ image = inp_pipe( "A cute corgi lives in a house made out of sushi.", image, mas
 }
 ```
 
+```
+@misc{arkhipkin2023kandinsky,
+      title={Kandinsky 3.0 Technical Report}, 
+      author={Vladimir Arkhipkin and Andrei Filatov and Viacheslav Vasilev and Anastasia Maltseva and Said Azizov and Igor Pavlov and Julia Agafonova and Andrey Kuznetsov and Denis Dimitrov},
+      year={2023},
+      eprint={2312.03511},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
