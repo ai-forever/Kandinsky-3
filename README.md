@@ -162,7 +162,7 @@ dtype_map = {
     'movq': torch.float32,
 }
 
-pipe = get_inpainting_pipeline(
+inp_pipe = get_inpainting_pipeline(
     device_map, dtype_map,
 )
 
