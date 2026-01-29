@@ -112,15 +112,73 @@ We release our two models:
 
 ## Installing
 
-To install repo first one need to create conda environment:
+### Quick Installation Script
 
+The easiest way to install Kandinsky-3 with automatic verification is to use the provided installation script.
+
+**For Linux/macOS:**
+
+```bash
+chmod +x install.sh
+./install.sh
 ```
-conda create -n kandinsky -y python=3.8;
-source activate kandinsky;
-pip install torch==1.10.1+cu111 torchvision==0.11.2+cu111 torchaudio==0.10.1 -f https://download.pytorch.org/whl/cu113/torch_stable.html;
-pip install -r requirements.txt;
+
+(Note: if you're working in Colab, you can disregard the chmod +x install.sh command, changing it for cd Kandinsky-3)
+
+**For Windows:**
+
+```bash
+install.bat
 ```
-The exact dependencies is got using `pip freeze` and can be found in `exact_requirements.txt`
+
+Both scripts will:
+- Download and install dependencies from `requirements.txt`
+- Install the package using `setup.py`
+- Verify the installation with an import test
+
+### Docker Installation
+
+You can also use Docker for a containerized setup:
+
+```bash
+docker build -t kandinsky3:latest .
+docker run -it kandinsky3:latest python3
+```
+
+For GPU support (requires NVIDIA Docker runtime):
+
+```bash
+docker run -it --gpus all kandinsky3:latest python3
+```
+
+### Manual Installation
+
+If you prefer manual installation, create a conda environment:
+
+```bash
+conda create -n kandinsky -y python=3.8
+source activate kandinsky
+pip install torch==1.10.1+cu111 torchvision==0.11.2+cu111 torchaudio==0.10.1 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+pip install -r requirements.txt
+pip install -e .
+```
+
+For exact dependencies used in development, see `exact_requirements.txt`
+
+### Verification
+
+After installation, verify that the package is correctly installed:
+
+```bash
+python3 test_import.py
+```
+
+Or directly in Python:
+
+```python
+import kandinsky3
+print("Kandinsky-3 had been successfully installed")
+```
 
 ## How to use:
 

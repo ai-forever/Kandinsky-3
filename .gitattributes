@@ -1,0 +1,3 @@
+Dockerfile linguist-vendored
+*.sh linguist-vendored
+*.bat linguist-vendored
